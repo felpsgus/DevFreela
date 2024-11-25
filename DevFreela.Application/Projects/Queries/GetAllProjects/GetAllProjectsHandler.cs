@@ -13,7 +13,8 @@ public class GetAllProjectsHandler : IRequestHandler<GetAllProjectsQuery, Result
         _projectRepository = projectRepository;
     }
 
-    public async Task<ResultViewModel<List<ProjectItemViewModel>>> Handle(GetAllProjectsQuery request, CancellationToken cancellationToken)
+    public async Task<ResultViewModel<List<ProjectItemViewModel>>> Handle(GetAllProjectsQuery request,
+        CancellationToken cancellationToken)
     {
         var projects = await _projectRepository.GetAllAsync();
 

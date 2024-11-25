@@ -10,4 +10,4 @@
       - sql-data:/var/opt/mssql
 
 volumes:
-    sql-data:
+  sql-data:

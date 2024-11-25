@@ -10,16 +10,19 @@ namespace DevFreela.Persistence;
 
 public static class PersistenceConfiguration
 {
-    public static IServiceCollection ConfigurePersistence(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigurePersistence(this IServiceCollection services,
+        IConfiguration configuration)
     {
         services.AddSingleton<SoftDeleteInterceptor>();
+        services.AddSingleton<UpdateInterceptor>();
 
         var connectionString = configuration.GetConnectionString("DevFreelaCs");
         services.AddDbContext<DevFreelaDbContext>((sp, options) =>
         {
-            options.UseSqlServer(connectionString);
+            options.UseSqlServer(connectionString).EnableSensitiveDataLogging();
             options.AddInterceptors(
-                sp.GetRequiredService<SoftDeleteInterceptor>());
+                sp.GetRequiredService<SoftDeleteInterceptor>(),
+                sp.GetRequiredService<UpdateInterceptor>());
         });
 
         services.AddRepositories();
@@ -33,6 +36,7 @@ public static class PersistenceConfiguration
         services.AddScoped<IProjectRepository, ProjectRepository>();
         services.AddScoped<IProjectCommentRepository, ProjectCommentRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ISkillRepository, SkillRepository>();
         return services;
     }
 }

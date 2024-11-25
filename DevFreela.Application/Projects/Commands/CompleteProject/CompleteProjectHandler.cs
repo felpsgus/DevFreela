@@ -22,6 +22,7 @@ public class CompleteProjectHandler : IRequestHandler<CompleteProjectCommand, Re
             {
                 return ResultViewModel.Error("Project not found");
             }
+
             await _projectRepository.CompleteAsync(project);
             return ResultViewModel.Success();
         }

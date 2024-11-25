@@ -97,11 +97,18 @@ public class ProjectRepository : IProjectRepository
         }
     }
 
-    public async Task<Project?> GetByIdAsync(long id)
+    public async Task<Project?> GetByIdAsync(long id, bool includeRelationships = false)
     {
+        if (includeRelationships)
+        {
+            return await _dbContext.Projects
+                .Include(p => p.Client)
+                .Include(p => p.Freelancer)
+                .Include(p => p.Comments)
+                .SingleOrDefaultAsync(p => p.Id == id);
+        }
+
         return await _dbContext.Projects
-            .Include(p => p.Client)
-            .Include(p => p.Freelancer)
             .SingleOrDefaultAsync(p => p.Id == id);
     }
 

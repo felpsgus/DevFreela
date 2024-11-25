@@ -23,6 +23,7 @@ public class UpdateProjectHandler : IRequestHandler<UpdateProjectCommand, Result
             {
                 return ResultViewModel.Error("Project not found");
             }
+
             project.Update(request.Title, request.Description, request.TotalCost);
             await _projectRepository.UpdateAsync(project);
             return ResultViewModel.Success();

@@ -13,18 +13,19 @@ public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, ResultViewMo
         _userRepository = userRepository;
     }
 
-    public async Task<ResultViewModel<UserViewModel>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+    public async Task<ResultViewModel<UserViewModel>> Handle(GetUserByIdQuery request,
+        CancellationToken cancellationToken)
     {
         try
         {
-            var user = await _userRepository.GetByIdAsync(request.Id);
+            var user = await _userRepository.GetByIdAsync(request.Id, true);
 
             if (user == null)
             {
                 return ResultViewModel<UserViewModel>.Error("User not found.");
             }
 
-            var userViewModel = new UserViewModel(user.Id, user.FullName, user.Email, user.BirthDate);
+            var userViewModel = UserViewModel.FromEntity(user);
 
             return ResultViewModel<UserViewModel>.Success(userViewModel);
         }

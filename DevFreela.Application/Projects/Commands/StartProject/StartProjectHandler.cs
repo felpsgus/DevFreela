@@ -22,6 +22,7 @@ public class StartProjectHandler : IRequestHandler<StartProjectCommand, ResultVi
             {
                 return ResultViewModel.Error("Project not found");
             }
+
             await _projectRepository.StartAsync(project);
             return ResultViewModel.Success();
         }

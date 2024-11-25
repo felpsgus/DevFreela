@@ -1,4 +1,5 @@
 using DevFreela.Application.Models;
+using DevFreela.Domain.Entities;
 using DevFreela.Domain.Interfaces;
 using MediatR;
 
@@ -22,7 +23,8 @@ public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, ResultViewMo
             {
                 return ResultViewModel.Error("User does not exist.");
             }
-            user.Update(request.FullName, request.Email);
+
+            user.Update(request.Name, request.Email, request.Skills.ToList());
             await _userRepository.UpdateAsync(user);
             return ResultViewModel.Success();
         }

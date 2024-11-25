@@ -1,4 +1,5 @@
 using DevFreela.Domain.Enums;
+using DevFreela.Domain.Shared;
 
 namespace DevFreela.Domain.Entities;
 
@@ -24,8 +25,8 @@ public class Project : Entity
     public long IdFreelancer { get; private set; }
     public User? Freelancer { get; private set; }
     public decimal TotalCost { get; private set; }
-    public DateTime? StartedAt { get; private set; }
-    public DateTime? CompletedAt { get; private set; }
+    public DateTimeOffset? StartedAt { get; private set; }
+    public DateTimeOffset? CompletedAt { get; private set; }
     public ProjectStatusEnum Status { get; private set; } = ProjectStatusEnum.Created;
     public List<ProjectComment> Comments { get; private set; } = [];
 
@@ -39,14 +40,14 @@ public class Project : Entity
     {
         if (Status != ProjectStatusEnum.Created) return;
         Status = ProjectStatusEnum.InProgress;
-        StartedAt = DateTime.Now;
+        StartedAt = DateTimeOffset.UtcNow;
     }
 
     public void Complete()
     {
         if (Status is not (ProjectStatusEnum.PaymentPending or ProjectStatusEnum.InProgress)) return;
         Status = ProjectStatusEnum.Completed;
-        CompletedAt = DateTime.Now;
+        CompletedAt = DateTimeOffset.UtcNow;
     }
 
     public void SetPaymentPending()
@@ -60,5 +61,15 @@ public class Project : Entity
         Title = title;
         Description = description;
         TotalCost = totalCost;
+    }
+
+    public void UpdateFreelancer(int idFreelancer)
+    {
+        IdFreelancer = idFreelancer;
+    }
+
+    public void AddComment(ProjectComment projectComment)
+    {
+        Comments.Add(projectComment);
     }
 }

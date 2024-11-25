@@ -22,6 +22,7 @@ public class DeleteProjectHandler : IRequestHandler<DeleteProjectCommand, Result
             {
                 return ResultViewModel.Error("Project not found");
             }
+
             await _projectRepository.DeleteAsync(project);
             return ResultViewModel.Success();
         }

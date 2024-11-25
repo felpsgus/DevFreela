@@ -1,38 +1,49 @@
+using DevFreela.Application.Skills.Commands.DeleteSkill;
+using DevFreela.Application.Skills.Commands.InsertSkill;
+using DevFreela.Application.Skills.Queries.GetAllSkills;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFreela.Api.Controllers;
 
 public class SkillsController : BaseController
 {
-    // GET: api/<SkillsController>
+    private readonly IMediator _mediator;
+
+    public SkillsController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
     [HttpGet]
-    public IEnumerable<string> Get()
+    public async Task<IActionResult> Get()
     {
-        return new string[] { "value1", "value2" };
+        var query = new GetAllSkillsQuery();
+        var skills = await _mediator.Send(query);
+
+        return Ok(skills);
     }
 
-    // GET api/<SkillsController>/5
-    [HttpGet("{id}")]
-    public string Get(int id)
-    {
-        return "value";
-    }
-
-    // POST api/<SkillsController>
     [HttpPost]
-    public void Post([FromBody] string value)
+    public async Task<IActionResult> Post([FromBody] InsertSkillCommand command)
     {
+        var result = await _mediator.Send(command);
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+
+        return CreatedAtAction(nameof(Get), new { id = result.Data }, command);
     }
 
-    // PUT api/<SkillsController>/5
-    [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    [HttpDelete("{id:long}")]
+    public async Task<IActionResult> Delete(long id)
     {
-    }
+        var command = new DeleteSkillCommand(id);
+        var result = await _mediator.Send(command);
 
-    // DELETE api/<SkillsController>/5
-    [HttpDelete("{id}")]
-    public void Delete(int id)
-    {
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+
+        return NoContent();
     }
 }

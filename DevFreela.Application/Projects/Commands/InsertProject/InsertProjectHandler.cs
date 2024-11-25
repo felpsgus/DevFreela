@@ -18,7 +18,8 @@ public class InsertProjectHandler : IRequestHandler<InsertProjectCommand, Result
     {
         try
         {
-            var project = new Project(request.Title, request.Description, request.IdClient, request.IdFreelancer, request.TotalCost);
+            var project = new Project(request.Title, request.Description, request.IdClient, request.IdFreelancer,
+                request.TotalCost);
             var id = await _projectRepository.AddAsync(project);
             return ResultViewModel<long>.Success(id);
         }

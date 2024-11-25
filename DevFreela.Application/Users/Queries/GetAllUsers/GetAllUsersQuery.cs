@@ -3,6 +3,6 @@ using MediatR;
 
 namespace DevFreela.Application.Users.Queries.GetAllUsers;
 
-public class GetAllUsersQuery : IRequest<ResultViewModel<List<GetAllUsersViewModel>>>
+public class GetAllUsersQuery : IRequest<ResultViewModel<List<UserItemViewModel>>>
 {
 }

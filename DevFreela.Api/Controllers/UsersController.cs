@@ -23,11 +23,6 @@ public class UsersController : BaseController
         var query = new GetAllUsersQuery();
         var users = await _mediator.Send(query);
 
-        if (!users.IsSuccess)
-        {
-            return BadRequest(users.Message);
-        }
-
         return Ok(users);
     }
 
@@ -38,9 +33,7 @@ public class UsersController : BaseController
         var user = await _mediator.Send(query);
 
         if (!user.IsSuccess)
-        {
             return BadRequest(user.Message);
-        }
 
         return Ok(user);
     }
@@ -51,9 +44,7 @@ public class UsersController : BaseController
         var result = await _mediator.Send(command);
 
         if (!result.IsSuccess)
-        {
             return BadRequest(result.Message);
-        }
 
         return CreatedAtAction(nameof(Get), new { id = result.Data }, command);
     }
@@ -61,12 +52,11 @@ public class UsersController : BaseController
     [HttpPut("{id:long}")]
     public async Task<IActionResult> Put(long id, [FromBody] UpdateUserCommand command)
     {
+        command.Id = id;
         var result = await _mediator.Send(command);
 
         if (!result.IsSuccess)
-        {
             return BadRequest(result.Message);
-        }
 
         return NoContent();
     }
@@ -78,9 +68,7 @@ public class UsersController : BaseController
         var result = await _mediator.Send(command);
 
         if (!result.IsSuccess)
-        {
             return BadRequest(result.Message);
-        }
 
         return NoContent();
     }

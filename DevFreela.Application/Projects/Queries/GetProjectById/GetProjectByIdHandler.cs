@@ -13,9 +13,10 @@ public class GetProjectByIdHandler : IRequestHandler<GetProjectByIdQuery, Result
         _projectRepository = projectRepository;
     }
 
-    public async Task<ResultViewModel<ProjectViewModel>> Handle(GetProjectByIdQuery request, CancellationToken cancellationToken)
+    public async Task<ResultViewModel<ProjectViewModel>> Handle(GetProjectByIdQuery request,
+        CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetByIdAsync(request.Id);
+        var project = await _projectRepository.GetByIdAsync(request.Id, true);
 
         if (project == null)
             return ResultViewModel<ProjectViewModel>.Error("Project not found");

@@ -7,5 +7,6 @@ public class InsertUserCommand : IRequest<ResultViewModel<long>>
 {
     public string Name { get; set; }
     public string Email { get; set; }
-    public DateTime BirthDate { get; set; }
+    public DateOnly BirthDate { get; set; }
+    public HashSet<long>? Skills { get; set; } = [];
 }

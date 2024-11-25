@@ -10,5 +10,11 @@ public class UserMap : BaseMap<User>
 
     protected override void MapFields(EntityTypeBuilder<User> builder)
     {
+        builder
+            .HasMany(u => u.Skills)
+            .WithMany()
+            .UsingEntity<UserSkill>(
+                l => l.HasOne<Skill>().WithMany().HasForeignKey(s => s.IdSkill).OnDelete(DeleteBehavior.Restrict),
+                r => r.HasOne<User>().WithMany(us => us.UserSkills).HasForeignKey(s => s.IdUser).OnDelete(DeleteBehavior.Restrict));
     }
 }

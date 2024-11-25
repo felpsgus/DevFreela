@@ -1,5 +1,6 @@
 using DevFreela.Application.Projects.Commands.CompleteProject;
 using DevFreela.Application.Projects.Commands.DeleteProject;
+using DevFreela.Application.Projects.Commands.InsertComment;
 using DevFreela.Application.Projects.Commands.InsertProject;
 using DevFreela.Application.Projects.Commands.StartProject;
 using DevFreela.Application.Projects.Commands.UpdateProject;
@@ -22,7 +23,9 @@ public class ProjectsController : BaseController
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var projects = await _mediator.Send(new GetAllProjectsQuery());
+        var query = new GetAllProjectsQuery();
+        var projects = await _mediator.Send(query);
+
         return Ok(projects);
     }
 
@@ -55,6 +58,7 @@ public class ProjectsController : BaseController
     [HttpPut("{id:long}")]
     public async Task<IActionResult> Put(long id, [FromBody] UpdateProjectCommand command)
     {
+        command.Id = id;
         var result = await _mediator.Send(command);
 
         if (!result.IsSuccess)
@@ -69,6 +73,20 @@ public class ProjectsController : BaseController
     public async Task<IActionResult> Delete(long id)
     {
         var result = await _mediator.Send(new DeleteProjectCommand(id));
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Message);
+        }
+
+        return NoContent();
+    }
+
+    [HttpPost("{id:long}/comments")]
+    public async Task<IActionResult> PostComment(long id, [FromBody] InsertCommentCommand command)
+    {
+        command.IdProject = id;
+        var result = await _mediator.Send(command);
 
         if (!result.IsSuccess)
         {

@@ -11,7 +11,8 @@ public class InsertCommentHandler : IRequestHandler<InsertCommentCommand, Result
     private readonly IProjectCommentRepository _projectCommentRepository;
     private readonly IUserRepository _userRepository;
 
-    public InsertCommentHandler(IProjectRepository projectRepository, IProjectCommentRepository projectCommentRepository, IUserRepository userRepository)
+    public InsertCommentHandler(IProjectRepository projectRepository,
+        IProjectCommentRepository projectCommentRepository, IUserRepository userRepository)
     {
         _projectRepository = projectRepository;
         _projectCommentRepository = projectCommentRepository;

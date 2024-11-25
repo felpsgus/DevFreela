@@ -20,6 +20,8 @@ public class InsertUserHandler : IRequestHandler<InsertUserCommand, ResultViewMo
         {
             var user = new User(request.Name, request.Email, request.BirthDate);
             var id = await _userRepository.AddAsync(user);
+            user.UpdateSkills(request.Skills.ToList());
+            await _userRepository.UpdateAsync(user);
             return ResultViewModel<long>.Success(id);
         }
         catch (Exception e)

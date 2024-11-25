@@ -1,3 +1,5 @@
+using DevFreela.Domain.Shared;
+
 namespace DevFreela.Domain.Entities;
 
 public class Skill : Entity
@@ -11,6 +13,16 @@ public class Skill : Entity
         Description = description;
     }
 
+    public Skill(long id)
+    {
+        Id = id;
+        Description = default!;
+    }
+
     public string Description { get; private set; }
-    public List<UserSkill> UserSkills { get; private set; } = [];
+
+    public void Update(string description)
+    {
+        Description = description;
+    }
 }

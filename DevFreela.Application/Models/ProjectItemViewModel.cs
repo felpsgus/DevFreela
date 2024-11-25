@@ -6,6 +6,10 @@ public class ProjectItemViewModel
 {
     public ProjectItemViewModel(long id, string title, string clientName, string freelancerName)
     {
+        Id = id;
+        Title = title;
+        ClientName = clientName;
+        FreelancerName = freelancerName;
     }
 
     public long Id { get; set; }
@@ -15,6 +19,7 @@ public class ProjectItemViewModel
 
     public static ProjectItemViewModel FromEntity(Project project)
     {
-        return new ProjectItemViewModel(project.Id, project.Title, project.Client.FullName, project.Freelancer.FullName);
+        return new ProjectItemViewModel(project.Id, project.Title, project.Client.FullName,
+            project.Freelancer.FullName);
     }
 }

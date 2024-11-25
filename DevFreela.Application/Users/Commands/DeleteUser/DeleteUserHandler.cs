@@ -22,6 +22,7 @@ public class DeleteUserHandler : IRequestHandler<DeleteUserCommand, ResultViewMo
             {
                 return ResultViewModel.Error("User does not exist.");
             }
+
             await _userRepository.DeleteAsync(user);
             return ResultViewModel.Success();
         }

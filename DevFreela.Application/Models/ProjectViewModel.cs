@@ -10,8 +10,8 @@ public class ProjectViewModel
         string clientName,
         string freelancerName,
         decimal totalCost,
-        DateTime? startedAt,
-        DateTime? finishedAt)
+        DateTimeOffset? startedAt,
+        DateTimeOffset? finishedAt, List<ProjectCommentViewModel> comments)
     {
         Id = id;
         Title = title;
@@ -21,6 +21,7 @@ public class ProjectViewModel
         TotalCost = totalCost;
         StartedAt = startedAt;
         FinishedAt = finishedAt;
+        Comments = comments;
     }
 
     public long Id { get; private set; }
@@ -29,8 +30,10 @@ public class ProjectViewModel
     public string ClientName { get; private set; }
     public string FreelancerName { get; private set; }
     public decimal TotalCost { get; private set; }
-    public DateTime? StartedAt { get; private set; }
-    public DateTime? FinishedAt { get; private set; }
+    public DateTimeOffset? StartedAt { get; private set; }
+    public DateTimeOffset? FinishedAt { get; private set; }
+
+    public List<ProjectCommentViewModel> Comments { get; set; }
 
     public static ProjectViewModel FromEntity(Project project)
     {
@@ -42,7 +45,10 @@ public class ProjectViewModel
             project.Freelancer.FullName,
             project.TotalCost,
             project.StartedAt,
-            project.CompletedAt
+            project.CompletedAt,
+            project.Comments
+                .Select(pc => new ProjectCommentViewModel(pc.Content, pc.User.FullName))
+                .ToList()
         );
     }
 }

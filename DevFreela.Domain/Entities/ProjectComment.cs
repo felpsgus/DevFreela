@@ -1,3 +1,5 @@
+using DevFreela.Domain.Shared;
+
 namespace DevFreela.Domain.Entities;
 
 public class ProjectComment : Entity

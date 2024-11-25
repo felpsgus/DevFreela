@@ -5,7 +5,7 @@ namespace DevFreela.Application.Projects.Commands.UpdateProject;
 
 public class UpdateProjectCommand : IRequest<ResultViewModel>
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public decimal TotalCost { get; set; }

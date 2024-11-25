@@ -1,11 +1,9 @@
+using DevFreela.Domain.Shared;
+
 namespace DevFreela.Domain.Entities;
 
 public class UserSkill : Entity
 {
-    protected UserSkill()
-    {
-    }
-
     public UserSkill(long idUser, long idSkill)
     {
         IdUser = idUser;
@@ -13,7 +11,5 @@ public class UserSkill : Entity
     }
 
     public long IdUser { get; private set; }
-    public User? User { get; private set; }
     public long IdSkill { get; private set; }
-    public Skill? Skill { get; private set; }
 }

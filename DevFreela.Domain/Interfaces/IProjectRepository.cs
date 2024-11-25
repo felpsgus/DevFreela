@@ -9,6 +9,6 @@ public interface IProjectRepository
     Task StartAsync(Project project);
     Task CompleteAsync(Project project);
     Task DeleteAsync(Project project);
-    Task<Project?> GetByIdAsync(long id);
+    Task<Project?> GetByIdAsync(long id, bool includeRelationships = false);
     Task<List<Project>> GetAllAsync();
 }

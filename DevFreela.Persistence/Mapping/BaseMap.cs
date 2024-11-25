@@ -1,5 +1,6 @@
-using DevFreela.Domain.Entities;
+using DevFreela.Domain.Shared;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DevFreela.Persistence.Mapping;
@@ -29,13 +30,14 @@ public abstract class BaseMap<TEntity> : IEntityTypeConfiguration<TEntity> where
         builder
             .Property(p => p.UpdatedAt)
             .HasDefaultValue(new DateTimeOffset())
-            .ValueGeneratedOnAddOrUpdate();
+            .ValueGeneratedOnUpdate()
+            .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Save);
 
         builder
             .Property(p => p.Deleted)
             .IsRequired()
             .HasDefaultValue(false);
-        
+
         builder
             .HasQueryFilter(q => q.Deleted == false);
 
