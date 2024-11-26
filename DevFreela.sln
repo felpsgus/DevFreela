@@ -6,12 +6,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevFreela.Domain", "DevFree
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevFreela.Persistence", "DevFreela.Persistence\DevFreela.Persistence.csproj", "{9E57D9C2-5728-4757-9267-C5BCD5C0310E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevFreela.Application", "DevFreela.Application\DevFreela.Application.csproj", "{860D2D2F-FA55-4AC2-B6BD-8581385D8C22}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A1F31BEC-372E-4DE3-8E7C-19830C1FE621}"
 	ProjectSection(SolutionItems) = preProject
 		compose.yaml = compose.yaml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevFreela.Application", "DevFreela.Application\DevFreela.Application.csproj", "{860D2D2F-FA55-4AC2-B6BD-8581385D8C22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevFreela.Test", "DevFreela.Test\DevFreela.Test.csproj", "{32ACA94B-40D5-43F8-9877-E45028E5CB35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{860D2D2F-FA55-4AC2-B6BD-8581385D8C22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{860D2D2F-FA55-4AC2-B6BD-8581385D8C22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{860D2D2F-FA55-4AC2-B6BD-8581385D8C22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32ACA94B-40D5-43F8-9877-E45028E5CB35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32ACA94B-40D5-43F8-9877-E45028E5CB35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32ACA94B-40D5-43F8-9877-E45028E5CB35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32ACA94B-40D5-43F8-9877-E45028E5CB35}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection

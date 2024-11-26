@@ -18,7 +18,7 @@ public class UpdateProjectHandler : IRequestHandler<UpdateProjectCommand, Result
     {
         try
         {
-            var project = await _projectRepository.GetByIdAsync(request.Id);
+            var project = await _projectRepository.GetByIdAsync((long)request.Id);
             if (project == null)
             {
                 return ResultViewModel.Error("Project not found");
