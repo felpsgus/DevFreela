@@ -19,7 +19,8 @@ public static class PersistenceConfiguration
         var connectionString = configuration.GetConnectionString("DevFreelaCs");
         services.AddDbContext<DevFreelaDbContext>((sp, options) =>
         {
-            options.UseSqlServer(connectionString).EnableSensitiveDataLogging();
+            options.UseSqlServer(connectionString);
+            options.EnableSensitiveDataLogging();
             options.AddInterceptors(
                 sp.GetRequiredService<SoftDeleteInterceptor>(),
                 sp.GetRequiredService<UpdateInterceptor>());

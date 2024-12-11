@@ -12,7 +12,6 @@ public class ProjectMap : BaseMap<Project>
     {
         builder
             .Property(p => p.TotalCost)
-            .HasColumnType("DECIMAL(10, 2)")
             .IsRequired();
 
         builder
