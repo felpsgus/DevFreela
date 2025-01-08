@@ -1,10 +1,11 @@
-using DevFreela.Application.Models;
+using DevFreela.Application.Abstractions;
+using DevFreela.Application.Views;
 using DevFreela.Domain.Interfaces;
 using MediatR;
 
 namespace DevFreela.Application.Projects.Queries.GetAllProjects;
 
-public class GetAllProjectsHandler : IRequestHandler<GetAllProjectsQuery, ResultViewModel<List<ProjectItemViewModel>>>
+public class GetAllProjectsHandler : IRequestHandler<GetAllProjectsQuery, Result<List<ProjectItemViewModel>>>
 {
     private readonly IProjectRepository _projectRepository;
 
@@ -13,7 +14,7 @@ public class GetAllProjectsHandler : IRequestHandler<GetAllProjectsQuery, Result
         _projectRepository = projectRepository;
     }
 
-    public async Task<ResultViewModel<List<ProjectItemViewModel>>> Handle(GetAllProjectsQuery request,
+    public async Task<Result<List<ProjectItemViewModel>>> Handle(GetAllProjectsQuery request,
         CancellationToken cancellationToken)
     {
         var projects = await _projectRepository.GetAllAsync();
@@ -22,6 +23,6 @@ public class GetAllProjectsHandler : IRequestHandler<GetAllProjectsQuery, Result
             .Select(ProjectItemViewModel.FromEntity)
             .ToList();
 
-        return ResultViewModel<List<ProjectItemViewModel>>.Success(projectsViewModel);
+        return Result<List<ProjectItemViewModel>>.Success(projectsViewModel);
     }
 }

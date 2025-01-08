@@ -1,9 +1,9 @@
-using DevFreela.Application.Models;
-using MediatR;
+using DevFreela.Application.Abstractions;
+using DevFreela.Application.Abstractions.Interfaces;
 
 namespace DevFreela.Application.Users.Commands.DeleteUser;
 
-public class DeleteUserCommand : IRequest<ResultViewModel>
+public record DeleteUserCommand : ICommand<Result>
 {
     public DeleteUserCommand(long id)
     {

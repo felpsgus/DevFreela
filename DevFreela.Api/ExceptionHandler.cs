@@ -10,8 +10,9 @@ public class ExceptionHandler : IExceptionHandler
     {
         var problemDetails = new ProblemDetails
         {
-            Title = "An error occurred",
             Status = StatusCodes.Status500InternalServerError,
+            Type = exception.GetType().Name,
+            Title = "Server error",
             Detail = exception.Message
         };
 

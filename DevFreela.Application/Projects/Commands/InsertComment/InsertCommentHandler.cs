@@ -1,11 +1,11 @@
-using DevFreela.Application.Models;
+using DevFreela.Application.Abstractions;
 using DevFreela.Domain.Entities;
 using DevFreela.Domain.Interfaces;
 using MediatR;
 
 namespace DevFreela.Application.Projects.Commands.InsertComment;
 
-public class InsertCommentHandler : IRequestHandler<InsertCommentCommand, ResultViewModel>
+public class InsertCommentHandler : IRequestHandler<InsertCommentCommand, Result>
 {
     private readonly IProjectRepository _projectRepository;
     private readonly IProjectCommentRepository _projectCommentRepository;
@@ -19,27 +19,19 @@ public class InsertCommentHandler : IRequestHandler<InsertCommentCommand, Result
         _userRepository = userRepository;
     }
 
-    public async Task<ResultViewModel> Handle(InsertCommentCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(InsertCommentCommand request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var project = await _projectRepository.GetByIdAsync(request.IdProject);
-            if (project == null)
-                return ResultViewModel.Error("Project not found");
+        var project = await _projectRepository.GetByIdAsync(request.IdProject);
+        if (project == null)
+            return new Error("Project", "Project not found");
 
-            var user = await _userRepository.GetByIdAsync(request.IdUser);
-            if (user == null)
-                return ResultViewModel.Error("User not found");
+        var user = await _userRepository.GetByIdAsync(request.IdUser);
+        if (user == null)
+            return new Error("User", "User not found");
 
-            var projectComment = new ProjectComment(request.Content, request.IdProject, request.IdUser);
-            await _projectCommentRepository.AddAsync(projectComment);
+        var projectComment = new ProjectComment(request.Content, request.IdProject, request.IdUser);
+        await _projectCommentRepository.AddAsync(projectComment);
 
-            return ResultViewModel.Success();
-        }
-        catch (Exception e)
-        {
-            return ResultViewModel.Error("An error occurred while adding a comment to the project");
-            throw;
-        }
+        return Result.Success();
     }
 }

@@ -1,3 +1,4 @@
+using System.Reflection;
 using DevFreela.Application.Projects.Commands.InsertProject;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +15,10 @@ public static class ApplicationConfiguration
     private static IServiceCollection AddMediatR(this IServiceCollection services)
     {
         services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<InsertProjectCommand>());
+        services.AddMediatR(config =>
+        {
+            config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+        });
         return services;
     }
 }

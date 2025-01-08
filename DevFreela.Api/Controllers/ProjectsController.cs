@@ -1,4 +1,4 @@
-using DevFreela.Application.Models;
+using DevFreela.Application.Abstractions;
 using DevFreela.Application.Projects.Commands.CompleteProject;
 using DevFreela.Application.Projects.Commands.DeleteProject;
 using DevFreela.Application.Projects.Commands.InsertComment;
@@ -7,6 +7,7 @@ using DevFreela.Application.Projects.Commands.StartProject;
 using DevFreela.Application.Projects.Commands.UpdateProject;
 using DevFreela.Application.Projects.Queries.GetAllProjects;
 using DevFreela.Application.Projects.Queries.GetProjectById;
+using DevFreela.Application.Views;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +28,7 @@ public class ProjectsController : BaseController
     /// <returns>A list of projects.</returns>
     /// <response code="200">Returns the list of projects.</response>
     [HttpGet]
-    [ProducesResponseType(typeof(ResultViewModel<List<ProjectItemViewModel>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<List<ProjectItemViewModel>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get()
     {
         var query = new GetAllProjectsQuery();
@@ -42,10 +43,10 @@ public class ProjectsController : BaseController
     /// <param name="id">The ID of the project.</param>
     /// <returns>The project details.</returns>
     /// <response code="200">Returns the project details.</response>
-    /// <response code="400">If the project is not found.</response>
+    /// <response code="404">If the project is not found.</response>
     [HttpGet("{id:long}")]
-    [ProducesResponseType(typeof(ResultViewModel<ProjectViewModel>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ResultViewModel<ProjectViewModel>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Result<ProjectViewModel>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<ProjectViewModel>), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Get(long id)
     {
         var project = await _mediator.Send(new GetProjectByIdQuery(id));
@@ -66,15 +67,15 @@ public class ProjectsController : BaseController
     /// <response code="201">Returns the created project.</response>
     /// <response code="400">If the project details are invalid.</response>
     [HttpPost]
-    [ProducesResponseType(typeof(ResultViewModel<long>), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ResultViewModel<long>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Result<long>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(Result<long>), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Post([FromBody] InsertProjectCommand command)
     {
         var result = await _mediator.Send(command);
 
         if (!result.IsSuccess)
         {
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         return CreatedAtAction(nameof(Get), new { id = result.Data }, command);
@@ -88,9 +89,11 @@ public class ProjectsController : BaseController
     /// <returns>No content.</returns>
     /// <response code="204">If the project is updated successfully.</response>
     /// <response code="400">If the project details are invalid.</response>
+    /// <response code="404">If the project is not found.</response>
     [HttpPut("{id:long}")]
-    [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Put(long id, [FromBody] UpdateProjectCommand command)
     {
         command.Id = id;
@@ -98,7 +101,7 @@ public class ProjectsController : BaseController
 
         if (!result.IsSuccess)
         {
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         return NoContent();
@@ -110,17 +113,17 @@ public class ProjectsController : BaseController
     /// <param name="id">The ID of the project to delete.</param>
     /// <returns>No content.</returns>
     /// <response code="204">If the project is deleted successfully.</response>
-    /// <response code="400">If the project is not found.</response>
+    /// <response code="404">If the project is not found.</response>
     [HttpDelete("{id:long}")]
-    [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(long id)
     {
         var result = await _mediator.Send(new DeleteProjectCommand(id));
 
         if (!result.IsSuccess)
         {
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         return NoContent();
@@ -135,8 +138,8 @@ public class ProjectsController : BaseController
     /// <response code="204">If the comment is added successfully.</response>
     /// <response code="400">If the comment details are invalid.</response>
     [HttpPost("{id:long}/comments")]
-    [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> PostComment(long id, [FromBody] InsertCommentCommand command)
     {
         command.IdProject = id;
@@ -144,7 +147,7 @@ public class ProjectsController : BaseController
 
         if (!result.IsSuccess)
         {
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         return NoContent();
@@ -156,17 +159,17 @@ public class ProjectsController : BaseController
     /// <param name="id">The ID of the project to start.</param>
     /// <returns>No content.</returns>
     /// <response code="204">If the project is started successfully.</response>
-    /// <response code="400">If the project is not found.</response>
+    /// <response code="404">If the project is not found.</response>
     [HttpPut("{id:long}/start")]
-    [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Start(long id)
     {
         var result = await _mediator.Send(new StartProjectCommand(id));
 
         if (!result.IsSuccess)
         {
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         return NoContent();
@@ -178,17 +181,17 @@ public class ProjectsController : BaseController
     /// <param name="id">The ID of the project to complete.</param>
     /// <returns>No content.</returns>
     /// <response code="204">If the project is completed successfully.</response>
-    /// <response code="400">If the project is not found.</response>
+    /// <response code="404">If the project is not found.</response>
     [HttpPut("{id:long}/complete")]
-    [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Complete(long id)
     {
         var result = await _mediator.Send(new CompleteProjectCommand(id));
 
         if (!result.IsSuccess)
         {
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         return NoContent();

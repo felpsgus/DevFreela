@@ -1,9 +1,9 @@
-using DevFreela.Application.Models;
-using MediatR;
+using DevFreela.Application.Abstractions;
+using DevFreela.Application.Abstractions.Interfaces;
 
 namespace DevFreela.Application.Projects.Commands.StartProject;
 
-public class StartProjectCommand : IRequest<ResultViewModel>
+public record StartProjectCommand : ICommand<Result>
 {
     public StartProjectCommand(long id)
     {

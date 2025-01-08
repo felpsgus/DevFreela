@@ -1,10 +1,11 @@
 using DevFreela.Domain.Entities;
 
-namespace DevFreela.Application.Models;
+namespace DevFreela.Application.Views;
 
 public class UserViewModel
 {
-    public UserViewModel(long id, string name, string email, DateOnly birthDate, List<SkillItemViewModel> skills, List<ProjectItemViewModel> ownedProjects, List<ProjectItemViewModel> freelanceProjects)
+    public UserViewModel(long id, string name, string email, DateOnly birthDate, List<SkillItemViewModel> skills,
+        List<ProjectItemViewModel> ownedProjects, List<ProjectItemViewModel> freelanceProjects)
     {
         Id = id;
         Name = name;

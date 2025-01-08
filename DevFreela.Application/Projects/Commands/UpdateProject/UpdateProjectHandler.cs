@@ -1,11 +1,10 @@
-using DevFreela.Application.Models;
-using DevFreela.Domain.Entities;
+using DevFreela.Application.Abstractions;
 using DevFreela.Domain.Interfaces;
 using MediatR;
 
 namespace DevFreela.Application.Projects.Commands.UpdateProject;
 
-public class UpdateProjectHandler : IRequestHandler<UpdateProjectCommand, ResultViewModel>
+public class UpdateProjectHandler : IRequestHandler<UpdateProjectCommand, Result>
 {
     private readonly IProjectRepository _projectRepository;
 
@@ -14,24 +13,16 @@ public class UpdateProjectHandler : IRequestHandler<UpdateProjectCommand, Result
         _projectRepository = projectRepository;
     }
 
-    public async Task<ResultViewModel> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
     {
-        try
+        var project = await _projectRepository.GetByIdAsync((long)request.Id);
+        if (project == null)
         {
-            var project = await _projectRepository.GetByIdAsync((long)request.Id);
-            if (project == null)
-            {
-                return ResultViewModel.Error("Project not found");
-            }
+            return new Error("Project", "Project not found");
+        }
 
-            project.Update(request.Title, request.Description, request.TotalCost);
-            await _projectRepository.UpdateAsync(project);
-            return ResultViewModel.Success();
-        }
-        catch (Exception e)
-        {
-            return ResultViewModel.Error("An error occurred while updating the project");
-            throw;
-        }
+        project.Update(request.Title, request.Description, request.TotalCost);
+        await _projectRepository.UpdateAsync(project);
+        return Result.Success();
     }
 }

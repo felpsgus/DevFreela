@@ -1,10 +1,11 @@
-using DevFreela.Application.Models;
+using DevFreela.Application.Abstractions;
+using DevFreela.Application.Views;
 using DevFreela.Domain.Interfaces;
 using MediatR;
 
 namespace DevFreela.Application.Projects.Queries.GetProjectById;
 
-public class GetProjectByIdHandler : IRequestHandler<GetProjectByIdQuery, ResultViewModel<ProjectViewModel>>
+public class GetProjectByIdHandler : IRequestHandler<GetProjectByIdQuery, Result<ProjectViewModel>>
 {
     private readonly IProjectRepository _projectRepository;
 
@@ -13,16 +14,16 @@ public class GetProjectByIdHandler : IRequestHandler<GetProjectByIdQuery, Result
         _projectRepository = projectRepository;
     }
 
-    public async Task<ResultViewModel<ProjectViewModel>> Handle(GetProjectByIdQuery request,
+    public async Task<Result<ProjectViewModel>> Handle(GetProjectByIdQuery request,
         CancellationToken cancellationToken)
     {
         var project = await _projectRepository.GetByIdAsync(request.Id, true);
 
         if (project == null)
-            return ResultViewModel<ProjectViewModel>.Error("Project not found");
+            return new Error("Project", "Project not found");
 
         var projectViewModel = ProjectViewModel.FromEntity(project);
 
-        return ResultViewModel<ProjectViewModel>.Success(projectViewModel);
+        return projectViewModel;
     }
 }

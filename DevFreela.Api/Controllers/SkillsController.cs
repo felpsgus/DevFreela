@@ -1,7 +1,8 @@
-using DevFreela.Application.Models;
+using DevFreela.Application.Abstractions;
 using DevFreela.Application.Skills.Commands.DeleteSkill;
 using DevFreela.Application.Skills.Commands.InsertSkill;
 using DevFreela.Application.Skills.Queries.GetAllSkills;
+using DevFreela.Application.Views;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +23,7 @@ public class SkillsController : BaseController
     /// <returns>A list of skills.</returns>
     /// <response code="200">Returns the list of skills.</response>
     [HttpGet]
-    [ProducesResponseType(typeof(ResultViewModel<List<SkillItemViewModel>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result<List<SkillItemViewModel>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get()
     {
         var query = new GetAllSkillsQuery();
@@ -39,14 +40,14 @@ public class SkillsController : BaseController
     /// <response code="201">Returns the created skill.</response>
     /// <response code="400">If the skill details are invalid.</response>
     [HttpPost]
-    [ProducesResponseType(typeof(ResultViewModel<long>), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ResultViewModel<long>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Result<long>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Post([FromBody] InsertSkillCommand command)
     {
         var result = await _mediator.Send(command);
 
         if (!result.IsSuccess)
-            return BadRequest(result.Message);
+            return BadRequest(result);
 
         return CreatedAtAction(nameof(Get), new { id = result.Data }, command);
     }
@@ -57,17 +58,17 @@ public class SkillsController : BaseController
     /// <param name="id">The ID of the skill to delete.</param>
     /// <returns>No content.</returns>
     /// <response code="204">If the skill is deleted successfully.</response>
-    /// <response code="400">If the skill is not found.</response>
+    /// <response code="404">If the skill is not found.</response>
     [HttpDelete("{id:long}")]
-    [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(ResultViewModel), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(long id)
     {
         var command = new DeleteSkillCommand(id);
         var result = await _mediator.Send(command);
 
         if (!result.IsSuccess)
-            return BadRequest(result.Message);
+            return BadRequest(result);
 
         return NoContent();
     }

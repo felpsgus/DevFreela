@@ -1,11 +1,10 @@
-using DevFreela.Application.Models;
-using DevFreela.Application.Skills.Commands.DeleteSkill;
+using DevFreela.Application.Abstractions;
 using DevFreela.Domain.Interfaces;
 using MediatR;
 
 namespace DevFreela.Application.Skills.Commands.DeleteSkill;
 
-public class DeleteSkillHandler : IRequestHandler<DeleteSkillCommand, ResultViewModel>
+public class DeleteSkillHandler : IRequestHandler<DeleteSkillCommand, Result>
 {
     private readonly ISkillRepository _skillRepository;
 
@@ -14,23 +13,15 @@ public class DeleteSkillHandler : IRequestHandler<DeleteSkillCommand, ResultView
         _skillRepository = skillRepository;
     }
 
-    public async Task<ResultViewModel> Handle(DeleteSkillCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(DeleteSkillCommand request, CancellationToken cancellationToken)
     {
-        try
+        var skill = await _skillRepository.GetByIdAsync(request.Id);
+        if (skill == null)
         {
-            var skill = await _skillRepository.GetByIdAsync(request.Id);
-            if (skill == null)
-            {
-                return ResultViewModel.Error("Skill does not exist.");
-            }
+            return new Error("Skill", "Skill does not exist.");
+        }
 
-            await _skillRepository.DeleteAsync(skill);
-            return ResultViewModel.Success();
-        }
-        catch (Exception e)
-        {
-            return ResultViewModel.Error("An error occurred while deleting the skill.");
-            throw;
-        }
+        await _skillRepository.DeleteAsync(skill);
+        return Result.Success();
     }
 }

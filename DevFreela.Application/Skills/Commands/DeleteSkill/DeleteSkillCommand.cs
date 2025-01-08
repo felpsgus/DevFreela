@@ -1,9 +1,9 @@
-using DevFreela.Application.Models;
-using MediatR;
+using DevFreela.Application.Abstractions;
+using DevFreela.Application.Abstractions.Interfaces;
 
 namespace DevFreela.Application.Skills.Commands.DeleteSkill;
 
-public class DeleteSkillCommand : IRequest<ResultViewModel>
+public record DeleteSkillCommand : ICommand<Result>
 {
     public DeleteSkillCommand(long id)
     {

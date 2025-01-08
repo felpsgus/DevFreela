@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using DevFreela.Application.Models;
-using MediatR;
+using DevFreela.Application.Abstractions;
+using DevFreela.Application.Abstractions.Interfaces;
 
 namespace DevFreela.Application.Skills.Commands.InsertSkill;
 
-public class InsertSkillCommand : IRequest<ResultViewModel<long>>
+public record InsertSkillCommand : ICommand<Result<long>>
 {
-    [Required]
-    public string Description { get; set; }
+    [Required] public string Description { get; set; }
 }

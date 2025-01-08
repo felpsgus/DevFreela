@@ -1,9 +1,10 @@
-using DevFreela.Application.Models;
+using DevFreela.Application.Abstractions;
+using DevFreela.Application.Views;
 using MediatR;
 
 namespace DevFreela.Application.Users.Queries.GetUserById;
 
-public class GetUserByIdQuery : IRequest<ResultViewModel<UserViewModel>>
+public class GetUserByIdQuery : IRequest<Result<UserViewModel>>
 {
     public GetUserByIdQuery(long id)
     {

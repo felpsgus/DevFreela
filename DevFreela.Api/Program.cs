@@ -27,18 +27,14 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1",
         Description = "API REST created in course Formação ASP.NET Core",
     });
-    options.SwaggerDoc("v2", new OpenApiInfo()
-    {
-        Title = "DevFreela API Teste",
-        Version = "v2",
-        Description = "API REST created in course Formação ASP.NET Core",
-    });
 
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
 builder.Services.AddExceptionHandler<ExceptionHandler>();
+
+builder.Services.AddProblemDetails();
 
 builder.Services.ConfigureDependencyInjection(builder.Configuration);
 
@@ -56,6 +52,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseExceptionHandler();
 
 app.UseAuthorization();
 

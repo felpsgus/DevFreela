@@ -1,9 +1,9 @@
-using DevFreela.Application.Models;
-using MediatR;
+using DevFreela.Application.Abstractions;
+using DevFreela.Application.Abstractions.Interfaces;
 
 namespace DevFreela.Application.Projects.Commands.DeleteProject;
 
-public class DeleteProjectCommand : IRequest<ResultViewModel>
+public record DeleteProjectCommand : ICommand<Result>
 {
     public DeleteProjectCommand(long id)
     {

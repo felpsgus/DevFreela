@@ -1,9 +1,10 @@
-using DevFreela.Application.Models;
+using DevFreela.Application.Abstractions;
+using DevFreela.Application.Views;
 using MediatR;
 
 namespace DevFreela.Application.Projects.Queries.GetProjectById;
 
-public class GetProjectByIdQuery : IRequest<ResultViewModel<ProjectViewModel>>
+public class GetProjectByIdQuery : IRequest<Result<ProjectViewModel>>
 {
     public GetProjectByIdQuery(long id)
     {

@@ -1,10 +1,10 @@
-using DevFreela.Application.Models;
+using DevFreela.Application.Abstractions;
 using DevFreela.Domain.Interfaces;
 using MediatR;
 
 namespace DevFreela.Application.Projects.Commands.DeleteProject;
 
-public class DeleteProjectHandler : IRequestHandler<DeleteProjectCommand, ResultViewModel>
+public class DeleteProjectHandler : IRequestHandler<DeleteProjectCommand, Result>
 {
     private readonly IProjectRepository _projectRepository;
 
@@ -13,23 +13,15 @@ public class DeleteProjectHandler : IRequestHandler<DeleteProjectCommand, Result
         _projectRepository = projectRepository;
     }
 
-    public async Task<ResultViewModel> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
     {
-        try
+        var project = await _projectRepository.GetByIdAsync(request.Id);
+        if (project == null)
         {
-            var project = await _projectRepository.GetByIdAsync(request.Id);
-            if (project == null)
-            {
-                return ResultViewModel.Error("Project not found");
-            }
+            return new Error("Project", "Project not found");
+        }
 
-            await _projectRepository.DeleteAsync(project);
-            return ResultViewModel.Success();
-        }
-        catch (Exception e)
-        {
-            return ResultViewModel.Error("An error occurred while deleting the project");
-            throw;
-        }
+        await _projectRepository.DeleteAsync(project);
+        return Result.Success();
     }
 }
