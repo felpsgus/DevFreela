@@ -32,9 +32,8 @@ public class ProjectsController : BaseController
     public async Task<IActionResult> Get()
     {
         var query = new GetAllProjectsQuery();
-        var projects = await _mediator.Send(query);
-
-        return Ok(projects);
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 
     /// <summary>
@@ -49,14 +48,12 @@ public class ProjectsController : BaseController
     [ProducesResponseType(typeof(Result<ProjectViewModel>), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Get(long id)
     {
-        var project = await _mediator.Send(new GetProjectByIdQuery(id));
+        var result = await _mediator.Send(new GetProjectByIdQuery(id));
 
-        if (project == null)
-        {
-            return BadRequest();
-        }
+        if (!result.IsSuccess)
+            return NotFound(result);
 
-        return Ok(project);
+        return Ok(result);
     }
 
     /// <summary>
@@ -74,9 +71,7 @@ public class ProjectsController : BaseController
         var result = await _mediator.Send(command);
 
         if (!result.IsSuccess)
-        {
             return BadRequest(result);
-        }
 
         return CreatedAtAction(nameof(Get), new { id = result.Data }, command);
     }
@@ -89,7 +84,6 @@ public class ProjectsController : BaseController
     /// <returns>No content.</returns>
     /// <response code="204">If the project is updated successfully.</response>
     /// <response code="400">If the project details are invalid.</response>
-    /// <response code="404">If the project is not found.</response>
     [HttpPut("{id:long}")]
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
@@ -100,9 +94,7 @@ public class ProjectsController : BaseController
         var result = await _mediator.Send(command);
 
         if (!result.IsSuccess)
-        {
             return BadRequest(result);
-        }
 
         return NoContent();
     }
@@ -122,9 +114,7 @@ public class ProjectsController : BaseController
         var result = await _mediator.Send(new DeleteProjectCommand(id));
 
         if (!result.IsSuccess)
-        {
-            return BadRequest(result);
-        }
+            return NotFound(result);
 
         return NoContent();
     }
@@ -142,13 +132,11 @@ public class ProjectsController : BaseController
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> PostComment(long id, [FromBody] InsertCommentCommand command)
     {
-        command.IdProject = id;
+        command.ProjectId = id;
         var result = await _mediator.Send(command);
 
         if (!result.IsSuccess)
-        {
             return BadRequest(result);
-        }
 
         return NoContent();
     }
@@ -168,9 +156,7 @@ public class ProjectsController : BaseController
         var result = await _mediator.Send(new StartProjectCommand(id));
 
         if (!result.IsSuccess)
-        {
-            return BadRequest(result);
-        }
+            return NotFound(result);
 
         return NoContent();
     }
@@ -190,9 +176,7 @@ public class ProjectsController : BaseController
         var result = await _mediator.Send(new CompleteProjectCommand(id));
 
         if (!result.IsSuccess)
-        {
-            return BadRequest(result);
-        }
+            return NotFound(result);
 
         return NoContent();
     }

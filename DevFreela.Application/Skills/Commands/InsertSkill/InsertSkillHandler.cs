@@ -5,7 +5,7 @@ using MediatR;
 
 namespace DevFreela.Application.Skills.Commands.InsertSkill;
 
-public class InsertSkillHandler : IRequestHandler<InsertSkillCommand, Result<long>>
+public sealed class InsertSkillHandler : IRequestHandler<InsertSkillCommand, Result<long>>
 {
     private readonly ISkillRepository _skillRepository;
 
@@ -17,7 +17,7 @@ public class InsertSkillHandler : IRequestHandler<InsertSkillCommand, Result<lon
     public async Task<Result<long>> Handle(InsertSkillCommand request, CancellationToken cancellationToken)
     {
         var skill = new Skill(request.Description);
-        var id = await _skillRepository.AddAsync(skill);
-        return Result<long>.Success(id);
+        var id = await _skillRepository.AddAsync(skill, cancellationToken);
+        return id;
     }
 }

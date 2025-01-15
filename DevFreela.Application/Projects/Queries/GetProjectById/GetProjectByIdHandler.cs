@@ -5,7 +5,7 @@ using MediatR;
 
 namespace DevFreela.Application.Projects.Queries.GetProjectById;
 
-public class GetProjectByIdHandler : IRequestHandler<GetProjectByIdQuery, Result<ProjectViewModel>>
+public sealed class GetProjectByIdHandler : IRequestHandler<GetProjectByIdQuery, Result<ProjectViewModel>>
 {
     private readonly IProjectRepository _projectRepository;
 
@@ -17,7 +17,7 @@ public class GetProjectByIdHandler : IRequestHandler<GetProjectByIdQuery, Result
     public async Task<Result<ProjectViewModel>> Handle(GetProjectByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetByIdAsync(request.Id, true);
+        var project = await _projectRepository.GetByIdAsync(request.Id, true, cancellationToken);
 
         if (project == null)
             return new Error("Project", "Project not found");

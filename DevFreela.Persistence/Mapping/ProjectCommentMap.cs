@@ -13,13 +13,13 @@ public class ProjectCommentMap : BaseMap<ProjectComment>
         builder
             .HasOne(pc => pc.Project)
             .WithMany(p => p.Comments)
-            .HasForeignKey(pc => pc.IdProject)
+            .HasForeignKey(pc => pc.ProjectId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .HasOne(pc => pc.User)
             .WithMany(u => u.Comments)
-            .HasForeignKey(pc => pc.IdUser)
+            .HasForeignKey(pc => pc.UserId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

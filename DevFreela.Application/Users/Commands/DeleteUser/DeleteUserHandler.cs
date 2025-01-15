@@ -4,7 +4,7 @@ using MediatR;
 
 namespace DevFreela.Application.Users.Commands.DeleteUser;
 
-public class DeleteUserHandler : IRequestHandler<DeleteUserCommand, Result>
+public sealed class DeleteUserHandler : IRequestHandler<DeleteUserCommand, Result>
 {
     private readonly IUserRepository _userRepository;
 
@@ -15,13 +15,9 @@ public class DeleteUserHandler : IRequestHandler<DeleteUserCommand, Result>
 
     public async Task<Result> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.Id);
-        if (user == null)
-        {
-            return new Error("User", "User does not exist.");
-        }
+        var user = await _userRepository.GetByIdAsync(request.Id, cancellationToken: cancellationToken);
 
-        await _userRepository.DeleteAsync(user);
+        await _userRepository.DeleteAsync(user, cancellationToken);
         return Result.Success();
     }
 }

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace DevFreela.Application.Skills.Commands.DeleteSkill;
 
-public class DeleteSkillHandler : IRequestHandler<DeleteSkillCommand, Result>
+public sealed class DeleteSkillHandler : IRequestHandler<DeleteSkillCommand, Result>
 {
     private readonly ISkillRepository _skillRepository;
 
@@ -15,13 +15,9 @@ public class DeleteSkillHandler : IRequestHandler<DeleteSkillCommand, Result>
 
     public async Task<Result> Handle(DeleteSkillCommand request, CancellationToken cancellationToken)
     {
-        var skill = await _skillRepository.GetByIdAsync(request.Id);
-        if (skill == null)
-        {
-            return new Error("Skill", "Skill does not exist.");
-        }
+        var skill = await _skillRepository.GetByIdAsync(request.Id, cancellationToken);
 
-        await _skillRepository.DeleteAsync(skill);
+        await _skillRepository.DeleteAsync(skill, cancellationToken);
         return Result.Success();
     }
 }

@@ -15,13 +15,13 @@ public class ProjectCommentRepository : IProjectCommentRepository
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<long> AddAsync(ProjectComment projectComment)
+    public async Task<long> AddAsync(ProjectComment projectComment, CancellationToken cancellationToken = default)
     {
         try
         {
             await _unitOfWork.BeginTransactionAsync();
-            await _dbContext.ProjectComments.AddAsync(projectComment);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.ProjectComments.AddAsync(projectComment, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
             await _unitOfWork.CommitTransactionAsync();
             return projectComment.Id;
         }

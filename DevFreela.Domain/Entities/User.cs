@@ -45,8 +45,8 @@ public class User : Entity
 
     public void UpdateSkills(List<long> userSkills)
     {
-        var newUserSkills = userSkills.Where(us => UserSkills.All(us1 => us1.IdSkill != us)).ToList();
-        var skillsToRemove = UserSkills.Where(us => userSkills.All(us1 => us1 != us.IdSkill)).ToList();
+        var newUserSkills = userSkills.Where(us => UserSkills.All(us1 => us1.SkillId != us)).ToList();
+        var skillsToRemove = UserSkills.Where(us => userSkills.All(us1 => us1 != us.SkillId)).ToList();
 
         foreach (var skill in newUserSkills)
         {

@@ -5,7 +5,7 @@ using MediatR;
 
 namespace DevFreela.Application.Projects.Commands.InsertProject;
 
-public class InsertProjectHandler : IRequestHandler<InsertProjectCommand, Result<long>>
+public sealed class InsertProjectHandler : IRequestHandler<InsertProjectCommand, Result<long>>
 {
     private readonly IProjectRepository _projectRepository;
 
@@ -16,9 +16,10 @@ public class InsertProjectHandler : IRequestHandler<InsertProjectCommand, Result
 
     public async Task<Result<long>> Handle(InsertProjectCommand request, CancellationToken cancellationToken)
     {
-        var project = new Project(request.Title, request.Description, request.IdClient, request.IdFreelancer,
+        var project = new Project(request.Title, request.Description, request.ClientId, request.FreelancerId,
             request.TotalCost);
-        var id = await _projectRepository.AddAsync(project);
-        return Result<long>.Success(id);
+        var id = await _projectRepository.AddAsync(project, cancellationToken);
+
+        return id;
     }
 }

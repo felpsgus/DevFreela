@@ -4,7 +4,7 @@ using MediatR;
 
 namespace DevFreela.Application.Projects.Commands.DeleteProject;
 
-public class DeleteProjectHandler : IRequestHandler<DeleteProjectCommand, Result>
+public sealed class DeleteProjectHandler : IRequestHandler<DeleteProjectCommand, Result>
 {
     private readonly IProjectRepository _projectRepository;
 
@@ -15,13 +15,9 @@ public class DeleteProjectHandler : IRequestHandler<DeleteProjectCommand, Result
 
     public async Task<Result> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetByIdAsync(request.Id);
-        if (project == null)
-        {
-            return new Error("Project", "Project not found");
-        }
+        var project = await _projectRepository.GetByIdAsync(request.Id, cancellationToken: cancellationToken);
 
-        await _projectRepository.DeleteAsync(project);
+        await _projectRepository.DeleteAsync(project, cancellationToken);
         return Result.Success();
     }
 }

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace DevFreela.Application.Projects.Commands.CompleteProject;
 
-public class CompleteProjectHandler : IRequestHandler<CompleteProjectCommand, Result>
+public sealed class CompleteProjectHandler : IRequestHandler<CompleteProjectCommand, Result>
 {
     private readonly IProjectRepository _projectRepository;
 
@@ -15,13 +15,9 @@ public class CompleteProjectHandler : IRequestHandler<CompleteProjectCommand, Re
 
     public async Task<Result> Handle(CompleteProjectCommand request, CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetByIdAsync(request.Id);
-        if (project == null)
-        {
-            return new Error("Project", "Project not found.");
-        }
+        var project = await _projectRepository.GetByIdAsync(request.Id, cancellationToken: cancellationToken);
 
-        await _projectRepository.CompleteAsync(project);
+        await _projectRepository.CompleteAsync(project, cancellationToken);
         return Result.Success();
     }
 }

@@ -4,12 +4,4 @@ using MediatR;
 
 namespace DevFreela.Application.Users.Queries.GetUserById;
 
-public class GetUserByIdQuery : IRequest<Result<UserViewModel>>
-{
-    public GetUserByIdQuery(long id)
-    {
-        Id = id;
-    }
-
-    public long Id { get; set; }
-}
+public record GetUserByIdQuery(long Id) : IRequest<Result<UserViewModel>>;

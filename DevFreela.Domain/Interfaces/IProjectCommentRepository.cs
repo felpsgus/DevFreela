@@ -4,5 +4,5 @@ namespace DevFreela.Domain.Interfaces;
 
 public interface IProjectCommentRepository
 {
-    Task<long> AddAsync(ProjectComment projectComment);
+    Task<long> AddAsync(ProjectComment projectComment, CancellationToken cancellationToken = default);
 }

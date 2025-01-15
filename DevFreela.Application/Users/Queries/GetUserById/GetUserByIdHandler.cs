@@ -5,7 +5,7 @@ using MediatR;
 
 namespace DevFreela.Application.Users.Queries.GetUserById;
 
-public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, Result<UserViewModel>>
+public sealed class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, Result<UserViewModel>>
 {
     private readonly IUserRepository _userRepository;
 
@@ -17,12 +17,10 @@ public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, Result<UserV
     public async Task<Result<UserViewModel>> Handle(GetUserByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.Id, true);
+        var user = await _userRepository.GetByIdAsync(request.Id, true, cancellationToken);
 
         if (user == null)
-        {
             return new Error("User", "User not found.");
-        }
 
         var userViewModel = UserViewModel.FromEntity(user);
 

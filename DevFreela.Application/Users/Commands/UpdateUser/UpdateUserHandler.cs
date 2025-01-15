@@ -4,7 +4,7 @@ using MediatR;
 
 namespace DevFreela.Application.Users.Commands.UpdateUser;
 
-public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, Result>
+public sealed class UpdateUserHandler : IRequestHandler<UpdateUserCommand, Result>
 {
     private readonly IUserRepository _userRepository;
 
@@ -15,14 +15,10 @@ public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, Result>
 
     public async Task<Result> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.Id);
-        if (user == null)
-        {
-            return new Error("User", "User does not exist.");
-        }
+        var user = await _userRepository.GetByIdAsync(request.Id, cancellationToken: cancellationToken);
 
-        user.Update(request.Name, request.Email, request.Skills.ToList());
-        await _userRepository.UpdateAsync(user);
+        user.Update(request.Name, request.Email, request.Skills?.ToList() ?? []);
+        await _userRepository.UpdateAsync(user, cancellationToken);
         return Result.Success();
     }
 }

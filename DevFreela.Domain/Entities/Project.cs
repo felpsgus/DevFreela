@@ -9,20 +9,20 @@ public class Project : Entity
     {
     }
 
-    public Project(string title, string description, int idClient, int idFreelancer, decimal totalCost)
+    public Project(string title, string description, int clientId, int freelancerId, decimal totalCost)
     {
         Title = title;
         Description = description;
-        IdClient = idClient;
-        IdFreelancer = idFreelancer;
+        ClientId = clientId;
+        FreelancerId = freelancerId;
         TotalCost = totalCost;
     }
 
     public string Title { get; private set; }
     public string Description { get; private set; }
-    public long IdClient { get; private set; }
+    public long ClientId { get; private set; }
     public User? Client { get; private set; }
-    public long IdFreelancer { get; private set; }
+    public long FreelancerId { get; private set; }
     public User? Freelancer { get; private set; }
     public decimal TotalCost { get; private set; }
     public DateTimeOffset? StartedAt { get; private set; }
@@ -63,9 +63,9 @@ public class Project : Entity
         TotalCost = totalCost;
     }
 
-    public void UpdateFreelancer(int idFreelancer)
+    public void UpdateFreelancer(int FreelancerId)
     {
-        IdFreelancer = idFreelancer;
+        FreelancerId = FreelancerId;
     }
 
     public void AddComment(ProjectComment projectComment)

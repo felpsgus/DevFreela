@@ -17,13 +17,13 @@ public class ProjectMap : BaseMap<Project>
         builder
             .HasOne(p => p.Client)
             .WithMany(u => u.OwnedProjects)
-            .HasForeignKey(p => p.IdClient)
+            .HasForeignKey(p => p.ClientId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .HasOne(p => p.Freelancer)
             .WithMany(u => u.FreelanceProjects)
-            .HasForeignKey(p => p.IdFreelancer)
+            .HasForeignKey(p => p.FreelancerId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

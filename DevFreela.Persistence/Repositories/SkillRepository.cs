@@ -16,13 +16,13 @@ public class SkillRepository : ISkillRepository
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<long> AddAsync(Skill skill)
+    public async Task<long> AddAsync(Skill skill, CancellationToken cancellationToken = default)
     {
         try
         {
             await _unitOfWork.BeginTransactionAsync();
-            await _dbContext.Skills.AddAsync(skill);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.Skills.AddAsync(skill, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
             await _unitOfWork.CommitTransactionAsync();
             return skill.Id;
         }
@@ -33,13 +33,13 @@ public class SkillRepository : ISkillRepository
         }
     }
 
-    public async Task UpdateAsync(Skill skill)
+    public async Task UpdateAsync(Skill skill, CancellationToken cancellationToken = default)
     {
         try
         {
             await _unitOfWork.BeginTransactionAsync();
             _dbContext.Skills.Update(skill);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
             await _unitOfWork.CommitTransactionAsync();
         }
         catch (Exception e)
@@ -49,13 +49,13 @@ public class SkillRepository : ISkillRepository
         }
     }
 
-    public async Task DeleteAsync(Skill skill)
+    public async Task DeleteAsync(Skill skill, CancellationToken cancellationToken = default)
     {
         try
         {
             await _unitOfWork.BeginTransactionAsync();
             _dbContext.Skills.Remove(skill);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
             await _unitOfWork.CommitTransactionAsync();
         }
         catch (Exception e)
@@ -65,13 +65,24 @@ public class SkillRepository : ISkillRepository
         }
     }
 
-    public async Task<Skill?> GetByIdAsync(long id)
+    public async Task<bool> ExistsAsync(long id, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Skills.SingleOrDefaultAsync(s => s.Id == id);
+        return await _dbContext.Skills.AnyAsync(s => s.Id == id, cancellationToken: cancellationToken);
     }
 
-    public async Task<List<Skill>> GetAllAsync()
+    public async Task<Skill?> GetByIdAsync(long id, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Skills.ToListAsync();
+        return await _dbContext.Skills.SingleOrDefaultAsync(s => s.Id == id, cancellationToken: cancellationToken);
+    }
+
+    public async Task<List<Skill>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Skills.ToListAsync(cancellationToken: cancellationToken);
+    }
+
+    public async Task<bool> CheckDescriptionAsync(string description, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Skills.AnyAsync(s => s.Description == description,
+            cancellationToken: cancellationToken);
     }
 }

@@ -6,8 +6,9 @@ namespace DevFreela.Persistence.Interceptors;
 
 public class UpdateInterceptor : SaveChangesInterceptor
 {
-    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result,
-        CancellationToken cancellationToken = new CancellationToken())
+    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData,
+        InterceptionResult<int> result,
+        CancellationToken cancellationToken = new())
     {
         if (eventData.Context is null) return base.SavingChangesAsync(eventData, result, cancellationToken);
 

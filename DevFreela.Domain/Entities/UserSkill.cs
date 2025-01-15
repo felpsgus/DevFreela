@@ -4,12 +4,12 @@ namespace DevFreela.Domain.Entities;
 
 public class UserSkill : Entity
 {
-    public UserSkill(long idUser, long idSkill)
+    public UserSkill(long userId, long skillId)
     {
-        IdUser = idUser;
-        IdSkill = idSkill;
+        UserId = userId;
+        SkillId = skillId;
     }
 
-    public long IdUser { get; private set; }
-    public long IdSkill { get; private set; }
+    public long UserId { get; private set; }
+    public long SkillId { get; private set; }
 }

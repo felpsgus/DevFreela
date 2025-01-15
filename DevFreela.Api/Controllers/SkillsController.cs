@@ -68,7 +68,7 @@ public class SkillsController : BaseController
         var result = await _mediator.Send(command);
 
         if (!result.IsSuccess)
-            return BadRequest(result);
+            return NotFound(result);
 
         return NoContent();
     }

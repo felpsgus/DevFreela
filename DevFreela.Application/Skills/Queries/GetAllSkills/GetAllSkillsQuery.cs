@@ -4,6 +4,4 @@ using MediatR;
 
 namespace DevFreela.Application.Skills.Queries.GetAllSkills;
 
-public class GetAllSkillsQuery : IRequest<Result<List<SkillItemViewModel>>>
-{
-}
+public record GetAllSkillsQuery : IRequest<Result<List<SkillItemViewModel>>>;

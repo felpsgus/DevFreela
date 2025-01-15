@@ -8,16 +8,16 @@ public class ProjectComment : Entity
     {
     }
 
-    public ProjectComment(string content, long idProject, long idUser)
+    public ProjectComment(string content, long projectId, long userId)
     {
         Content = content;
-        IdProject = idProject;
-        IdUser = idUser;
+        ProjectId = projectId;
+        UserId = userId;
     }
 
     public string Content { get; private set; }
-    public long IdProject { get; private set; }
+    public long ProjectId { get; private set; }
     public Project? Project { get; private set; }
-    public long IdUser { get; private set; }
+    public long UserId { get; private set; }
     public User? User { get; private set; }
 }

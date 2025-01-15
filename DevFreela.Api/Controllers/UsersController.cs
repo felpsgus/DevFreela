@@ -50,7 +50,7 @@ public class UsersController : BaseController
         var user = await _mediator.Send(query);
 
         if (!user.IsSuccess)
-            return BadRequest(user);
+            return NotFound(user);
 
         return Ok(user);
     }
@@ -83,7 +83,6 @@ public class UsersController : BaseController
     /// <returns>No content.</returns>
     /// <response code="204">If the user is updated successfully.</response>
     /// <response code="400">If the user details are invalid.</response>
-    /// <response code="404">If the user is not found.</response>
     [HttpPut("{id:long}")]
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
@@ -115,7 +114,7 @@ public class UsersController : BaseController
         var result = await _mediator.Send(command);
 
         if (!result.IsSuccess)
-            return BadRequest(result);
+            return NotFound(result);
 
         return NoContent();
     }
