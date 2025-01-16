@@ -6,9 +6,7 @@ public interface ISkillRepository
 {
     Task<long> AddAsync(Skill user, CancellationToken cancellationToken = default);
 
-    Task UpdateAsync(Skill user, CancellationToken cancellationToken = default);
-
-    Task DeleteAsync(Skill user, CancellationToken cancellationToken = default);
+    void Delete(Skill user);
 
     Task<bool> ExistsAsync(long id, CancellationToken cancellationToken = default);
 

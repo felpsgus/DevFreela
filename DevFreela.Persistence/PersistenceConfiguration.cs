@@ -33,7 +33,7 @@ public static class PersistenceConfiguration
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
-        services.AddScoped<UnitOfWork>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IProjectRepository, ProjectRepository>();
         services.AddScoped<IProjectCommentRepository, ProjectCommentRepository>();
         services.AddScoped<IUserRepository, UserRepository>();

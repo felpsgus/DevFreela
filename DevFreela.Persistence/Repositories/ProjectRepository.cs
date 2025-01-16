@@ -8,93 +8,21 @@ namespace DevFreela.Persistence.Repositories;
 public class ProjectRepository : IProjectRepository
 {
     private readonly DevFreelaDbContext _dbContext;
-    private readonly UnitOfWork _unitOfWork;
 
-    public ProjectRepository(DevFreelaDbContext dbContext, UnitOfWork unitOfWork)
+    public ProjectRepository(DevFreelaDbContext dbContext)
     {
         _dbContext = dbContext;
-        _unitOfWork = unitOfWork;
     }
 
     public async Task<long> AddAsync(Project project, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await _unitOfWork.BeginTransactionAsync();
-            await _dbContext.Projects.AddAsync(project, cancellationToken);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            await _unitOfWork.CommitTransactionAsync();
-            return project.Id;
-        }
-        catch (Exception e)
-        {
-            await _unitOfWork.RollbackTransactionAsync();
-            throw;
-        }
+        await _dbContext.Projects.AddAsync(project, cancellationToken);
+        return project.Id;
     }
 
-    public async Task UpdateAsync(Project project, CancellationToken cancellationToken = default)
+    public void Delete(Project project)
     {
-        try
-        {
-            await _unitOfWork.BeginTransactionAsync();
-            _dbContext.Projects.Update(project);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            await _unitOfWork.CommitTransactionAsync();
-        }
-        catch (Exception e)
-        {
-            await _unitOfWork.RollbackTransactionAsync();
-            throw;
-        }
-    }
-
-    public async Task StartAsync(Project project, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            await _unitOfWork.BeginTransactionAsync();
-            project.Start();
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            await _unitOfWork.CommitTransactionAsync();
-        }
-        catch (Exception e)
-        {
-            await _unitOfWork.RollbackTransactionAsync();
-            throw;
-        }
-    }
-
-    public async Task CompleteAsync(Project project, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            await _unitOfWork.BeginTransactionAsync();
-            project.Complete();
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            await _unitOfWork.CommitTransactionAsync();
-        }
-        catch (Exception e)
-        {
-            await _unitOfWork.RollbackTransactionAsync();
-            throw;
-        }
-    }
-
-    public async Task DeleteAsync(Project project, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            await _unitOfWork.BeginTransactionAsync();
-            _dbContext.Projects.Remove(project);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            await _unitOfWork.CommitTransactionAsync();
-        }
-        catch (Exception e)
-        {
-            await _unitOfWork.RollbackTransactionAsync();
-            throw;
-        }
+        _dbContext.Projects.Remove(project);
     }
 
     public async Task<bool> ExistsAsync(long id, CancellationToken cancellationToken = default)

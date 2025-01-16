@@ -8,61 +8,21 @@ namespace DevFreela.Persistence.Repositories;
 public class UserRepository : IUserRepository
 {
     private readonly DevFreelaDbContext _dbContext;
-    private readonly UnitOfWork _unitOfWork;
 
-    public UserRepository(DevFreelaDbContext dbContext, UnitOfWork unitOfWork)
+    public UserRepository(DevFreelaDbContext dbContext)
     {
         _dbContext = dbContext;
-        _unitOfWork = unitOfWork;
     }
 
     public async Task<long> AddAsync(User user, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await _unitOfWork.BeginTransactionAsync();
-            await _dbContext.Users.AddAsync(user, cancellationToken);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            await _unitOfWork.CommitTransactionAsync();
-            return user.Id;
-        }
-        catch (Exception e)
-        {
-            await _unitOfWork.RollbackTransactionAsync();
-            throw;
-        }
+        await _dbContext.Users.AddAsync(user, cancellationToken);
+        return user.Id;
     }
 
-    public async Task UpdateAsync(User user, CancellationToken cancellationToken = default)
+    public void Delete(User user)
     {
-        try
-        {
-            await _unitOfWork.BeginTransactionAsync();
-            _dbContext.Users.Update(user);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            await _unitOfWork.CommitTransactionAsync();
-        }
-        catch (Exception e)
-        {
-            await _unitOfWork.RollbackTransactionAsync();
-            throw;
-        }
-    }
-
-    public async Task DeleteAsync(User user, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            await _unitOfWork.BeginTransactionAsync();
-            _dbContext.Users.Remove(user);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            await _unitOfWork.CommitTransactionAsync();
-        }
-        catch (Exception e)
-        {
-            await _unitOfWork.RollbackTransactionAsync();
-            throw;
-        }
+        _dbContext.Users.Remove(user);
     }
 
     public async Task<bool> ExistsAsync(long id, CancellationToken cancellationToken = default)

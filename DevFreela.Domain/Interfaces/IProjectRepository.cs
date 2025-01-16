@@ -6,13 +6,7 @@ public interface IProjectRepository
 {
     Task<long> AddAsync(Project project, CancellationToken cancellationToken = default);
 
-    Task UpdateAsync(Project project, CancellationToken cancellationToken = default);
-
-    Task StartAsync(Project project, CancellationToken cancellationToken = default);
-
-    Task CompleteAsync(Project project, CancellationToken cancellationToken = default);
-
-    Task DeleteAsync(Project project, CancellationToken cancellationToken = default);
+    void Delete(Project project);
 
     Task<bool> ExistsAsync(long id, CancellationToken cancellationToken = default);
 

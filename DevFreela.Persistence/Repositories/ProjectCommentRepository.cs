@@ -7,28 +7,15 @@ namespace DevFreela.Persistence.Repositories;
 public class ProjectCommentRepository : IProjectCommentRepository
 {
     private readonly DevFreelaDbContext _dbContext;
-    private readonly UnitOfWork _unitOfWork;
 
-    public ProjectCommentRepository(DevFreelaDbContext dbContext, UnitOfWork unitOfWork)
+    public ProjectCommentRepository(DevFreelaDbContext dbContext)
     {
         _dbContext = dbContext;
-        _unitOfWork = unitOfWork;
     }
 
     public async Task<long> AddAsync(ProjectComment projectComment, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await _unitOfWork.BeginTransactionAsync();
-            await _dbContext.ProjectComments.AddAsync(projectComment, cancellationToken);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            await _unitOfWork.CommitTransactionAsync();
-            return projectComment.Id;
-        }
-        catch (Exception e)
-        {
-            await _unitOfWork.RollbackTransactionAsync();
-            throw;
-        }
+        await _dbContext.ProjectComments.AddAsync(projectComment, cancellationToken);
+        return projectComment.Id;
     }
 }

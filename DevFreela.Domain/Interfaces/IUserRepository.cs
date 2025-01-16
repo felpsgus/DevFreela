@@ -6,9 +6,7 @@ public interface IUserRepository
 {
     Task<long> AddAsync(User user, CancellationToken cancellationToken = default);
 
-    Task UpdateAsync(User user, CancellationToken cancellationToken = default);
-
-    Task DeleteAsync(User user, CancellationToken cancellationToken = default);
+    void Delete(User user);
 
     Task<bool> ExistsAsync(long id, CancellationToken cancellationToken = default);
 

@@ -1,8 +1,9 @@
+using DevFreela.Domain.Interfaces;
 using DevFreela.Persistence.Context;
 
 namespace DevFreela.Persistence.Repositories;
 
-public class UnitOfWork
+public class UnitOfWork : IUnitOfWork
 {
     private readonly DevFreelaDbContext _dbContext;
 
@@ -11,18 +12,19 @@ public class UnitOfWork
         _dbContext = dbContext;
     }
 
-    public async Task BeginTransactionAsync()
+    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        await _dbContext.Database.BeginTransactionAsync();
-    }
-
-    public async Task CommitTransactionAsync()
-    {
-        await _dbContext.Database.CommitTransactionAsync();
-    }
-
-    public async Task RollbackTransactionAsync()
-    {
-        await _dbContext.Database.RollbackTransactionAsync();
+        try
+        {
+            await _dbContext.Database.BeginTransactionAsync(cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            await _dbContext.Database.CommitTransactionAsync(cancellationToken);
+        }
+        catch (Exception e)
+        {
+            await _dbContext.Database.RollbackTransactionAsync(cancellationToken);
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }
