@@ -1,3 +1,4 @@
+using DevFreela.Domain.Exceptions;
 using DevFreela.Domain.Shared;
 
 namespace DevFreela.Domain.Entities;
@@ -35,11 +36,16 @@ public class User : Entity
 
     public void Inactivate()
     {
+        if (Active == false)
+            throw new DomainException("User is already inactive");
+
         Active = false;
     }
 
     public void Activate()
     {
+        if (Active)
+            throw new DomainException("User is already active");
         Active = true;
     }
 

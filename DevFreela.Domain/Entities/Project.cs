@@ -1,10 +1,13 @@
 using DevFreela.Domain.Enums;
+using DevFreela.Domain.Exceptions;
 using DevFreela.Domain.Shared;
 
 namespace DevFreela.Domain.Entities;
 
 public class Project : Entity
 {
+    public const string ProjectInvalidStatus = "Project is in an invalid status.";
+
     protected Project()
     {
     }
@@ -32,27 +35,31 @@ public class Project : Entity
 
     public void Cancel()
     {
-        if (Status is not (ProjectStatusEnum.InProgress or ProjectStatusEnum.Suspended)) return;
+        if (Status is not (ProjectStatusEnum.InProgress or ProjectStatusEnum.Suspended))
+            throw new DomainException(ProjectInvalidStatus);
         Status = ProjectStatusEnum.Cancelled;
     }
 
     public void Start()
     {
-        if (Status != ProjectStatusEnum.Created) return;
+        if (Status != ProjectStatusEnum.Created)
+            throw new DomainException(ProjectInvalidStatus);
         Status = ProjectStatusEnum.InProgress;
         StartedAt = DateTimeOffset.UtcNow;
     }
 
     public void Complete()
     {
-        if (Status is not (ProjectStatusEnum.PaymentPending or ProjectStatusEnum.InProgress)) return;
+        if (Status is not (ProjectStatusEnum.PaymentPending or ProjectStatusEnum.InProgress))
+            throw new DomainException(ProjectInvalidStatus);
         Status = ProjectStatusEnum.Completed;
         CompletedAt = DateTimeOffset.UtcNow;
     }
 
     public void SetPaymentPending()
     {
-        if (Status != ProjectStatusEnum.InProgress) return;
+        if (Status != ProjectStatusEnum.InProgress)
+            throw new DomainException(ProjectInvalidStatus);
         Status = ProjectStatusEnum.PaymentPending;
     }
 
@@ -63,9 +70,9 @@ public class Project : Entity
         TotalCost = totalCost;
     }
 
-    public void UpdateFreelancer(int FreelancerId)
+    public void UpdateFreelancer(int freelancerId)
     {
-        FreelancerId = FreelancerId;
+        FreelancerId = freelancerId;
     }
 
     public void AddComment(ProjectComment projectComment)
