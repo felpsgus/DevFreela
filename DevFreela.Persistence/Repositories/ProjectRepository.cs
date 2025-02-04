@@ -14,10 +14,9 @@ public class ProjectRepository : IProjectRepository
         _dbContext = dbContext;
     }
 
-    public async Task<long> AddAsync(Project project, CancellationToken cancellationToken = default)
+    public async Task AddAsync(Project project, CancellationToken cancellationToken = default)
     {
         await _dbContext.Projects.AddAsync(project, cancellationToken);
-        return project.Id;
     }
 
     public void Delete(Project project)

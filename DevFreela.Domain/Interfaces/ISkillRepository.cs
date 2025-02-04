@@ -4,7 +4,7 @@ namespace DevFreela.Domain.Interfaces;
 
 public interface ISkillRepository
 {
-    Task<long> AddAsync(Skill user, CancellationToken cancellationToken = default);
+    Task AddAsync(Skill user, CancellationToken cancellationToken = default);
 
     void Delete(Skill user);
 

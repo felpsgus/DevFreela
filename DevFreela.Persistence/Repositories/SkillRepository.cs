@@ -14,10 +14,9 @@ public class SkillRepository : ISkillRepository
         _dbContext = dbContext;
     }
 
-    public async Task<long> AddAsync(Skill skill, CancellationToken cancellationToken = default)
+    public async Task AddAsync(Skill skill, CancellationToken cancellationToken = default)
     {
         await _dbContext.Skills.AddAsync(skill, cancellationToken);
-        return skill.Id;
     }
 
     public void Delete(Skill skill)

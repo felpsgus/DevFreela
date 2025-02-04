@@ -35,7 +35,6 @@ public static class PersistenceConfiguration
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IProjectRepository, ProjectRepository>();
-        services.AddScoped<IProjectCommentRepository, ProjectCommentRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ISkillRepository, SkillRepository>();
         return services;

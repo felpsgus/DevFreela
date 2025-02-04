@@ -4,7 +4,7 @@ namespace DevFreela.Domain.Interfaces;
 
 public interface IProjectRepository
 {
-    Task<long> AddAsync(Project project, CancellationToken cancellationToken = default);
+    Task AddAsync(Project project, CancellationToken cancellationToken = default);
 
     void Delete(Project project);
 

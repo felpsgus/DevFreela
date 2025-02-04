@@ -4,7 +4,7 @@ namespace DevFreela.Domain.Interfaces;
 
 public interface IUserRepository
 {
-    Task<long> AddAsync(User user, CancellationToken cancellationToken = default);
+    Task AddAsync(User user, CancellationToken cancellationToken = default);
 
     void Delete(User user);
 
