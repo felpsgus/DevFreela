@@ -1,7 +1,7 @@
 using DevFreela.Application.Abstractions;
+using DevFreela.Application.Projects.Commands.AddComment;
 using DevFreela.Application.Projects.Commands.CompleteProject;
 using DevFreela.Application.Projects.Commands.DeleteProject;
-using DevFreela.Application.Projects.Commands.InsertComment;
 using DevFreela.Application.Projects.Commands.InsertProject;
 using DevFreela.Application.Projects.Commands.StartProject;
 using DevFreela.Application.Projects.Commands.UpdateProject;
@@ -130,7 +130,7 @@ public class ProjectsController : BaseController
     [HttpPost("{id:long}/comments")]
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> PostComment(long id, [FromBody] InsertCommentCommand command)
+    public async Task<IActionResult> PostComment(long id, [FromBody] AddCommentCommand command)
     {
         command.ProjectId = id;
         var result = await _mediator.Send(command);

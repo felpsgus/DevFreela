@@ -3,9 +3,9 @@ using System.Text.Json.Serialization;
 using DevFreela.Application.Abstractions;
 using DevFreela.Application.Abstractions.Interfaces;
 
-namespace DevFreela.Application.Projects.Commands.InsertComment;
+namespace DevFreela.Application.Projects.Commands.AddComment;
 
-public class InsertCommentCommand : ICommand<Result>
+public class AddCommentCommand : ICommand<Result>
 {
     [Required] public string Content { get; init; }
     [Required] public long UserId { get; init; }

@@ -1,11 +1,11 @@
 using DevFreela.Domain.Interfaces;
 using FluentValidation;
 
-namespace DevFreela.Application.Projects.Commands.InsertComment;
+namespace DevFreela.Application.Projects.Commands.AddComment;
 
-public sealed class InsertCommentValidator : AbstractValidator<InsertCommentCommand>
+public sealed class AddCommentValidator : AbstractValidator<AddCommentCommand>
 {
-    public InsertCommentValidator(IProjectRepository projectRepository, IUserRepository userRepository)
+    public AddCommentValidator(IProjectRepository projectRepository, IUserRepository userRepository)
     {
         RuleFor(p => p.Content)
             .NotEmpty()
