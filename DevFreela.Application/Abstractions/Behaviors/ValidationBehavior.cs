@@ -26,8 +26,6 @@ public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
             .Select(result => new Error(result.PropertyName, result.ErrorMessage))
             .ToList();
 
-
-
         if (failures.Count != 0)
             return CreateValidationResult(failures);
 
@@ -43,6 +41,6 @@ public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
             .GetGenericTypeDefinition()
             .MakeGenericType(typeof(TResponse).GetGenericArguments()[0])
             .GetMethod(nameof(ValidationResult<object>.WithErrors))
-            .Invoke(null, new object[] {errors}) as TResponse;
+            .Invoke(null, new object[] { errors }) as TResponse;
     }
 }
