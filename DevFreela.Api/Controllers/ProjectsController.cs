@@ -29,10 +29,10 @@ public class ProjectsController : BaseController
     /// <response code="200">Returns the list of projects.</response>
     [HttpGet]
     [ProducesResponseType(typeof(Result<List<ProjectItemViewModel>>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
         var query = new GetAllProjectsQuery();
-        var result = await _mediator.Send(query);
+        var result = await _mediator.Send(query, cancellationToken);
         return Ok(result);
     }
 
@@ -46,9 +46,9 @@ public class ProjectsController : BaseController
     [HttpGet("{id:long}")]
     [ProducesResponseType(typeof(Result<ProjectViewModel>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result<ProjectViewModel>), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Get(long id)
+    public async Task<IActionResult> Get(long id, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new GetProjectByIdQuery(id));
+        var result = await _mediator.Send(new GetProjectByIdQuery(id), cancellationToken);
 
         if (!result.IsSuccess)
             return NotFound(result);
@@ -66,9 +66,9 @@ public class ProjectsController : BaseController
     [HttpPost]
     [ProducesResponseType(typeof(Result<long>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Result<long>), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Post([FromBody] InsertProjectCommand command)
+    public async Task<IActionResult> Post([FromBody] InsertProjectCommand command, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(command, cancellationToken);
 
         if (!result.IsSuccess)
             return BadRequest(result);
@@ -88,10 +88,10 @@ public class ProjectsController : BaseController
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Put(long id, [FromBody] UpdateProjectCommand command)
+    public async Task<IActionResult> Put(long id, [FromBody] UpdateProjectCommand command, CancellationToken cancellationToken)
     {
         command.Id = id;
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(command, cancellationToken);
 
         if (!result.IsSuccess)
             return BadRequest(result);
@@ -109,9 +109,9 @@ public class ProjectsController : BaseController
     [HttpDelete("{id:long}")]
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Delete(long id)
+    public async Task<IActionResult> Delete(long id, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new DeleteProjectCommand(id));
+        var result = await _mediator.Send(new DeleteProjectCommand(id), cancellationToken);
 
         if (!result.IsSuccess)
             return NotFound(result);
@@ -130,10 +130,10 @@ public class ProjectsController : BaseController
     [HttpPost("{id:long}/comments")]
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> PostComment(long id, [FromBody] AddCommentCommand command)
+    public async Task<IActionResult> PostComment(long id, [FromBody] AddCommentCommand command, CancellationToken cancellationToken)
     {
         command.ProjectId = id;
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(command, cancellationToken);
 
         if (!result.IsSuccess)
             return BadRequest(result);
@@ -151,9 +151,9 @@ public class ProjectsController : BaseController
     [HttpPut("{id:long}/start")]
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Start(long id)
+    public async Task<IActionResult> Start(long id, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new StartProjectCommand(id));
+        var result = await _mediator.Send(new StartProjectCommand(id), cancellationToken);
 
         if (!result.IsSuccess)
             return NotFound(result);
@@ -171,9 +171,9 @@ public class ProjectsController : BaseController
     [HttpPut("{id:long}/complete")]
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Complete(long id)
+    public async Task<IActionResult> Complete(long id, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new CompleteProjectCommand(id));
+        var result = await _mediator.Send(new CompleteProjectCommand(id), cancellationToken);
 
         if (!result.IsSuccess)
             return NotFound(result);

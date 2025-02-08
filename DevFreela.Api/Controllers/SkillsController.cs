@@ -24,10 +24,10 @@ public class SkillsController : BaseController
     /// <response code="200">Returns the list of skills.</response>
     [HttpGet]
     [ProducesResponseType(typeof(Result<List<SkillItemViewModel>>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
         var query = new GetAllSkillsQuery();
-        var skills = await _mediator.Send(query);
+        var skills = await _mediator.Send(query, cancellationToken);
 
         return Ok(skills);
     }
@@ -42,9 +42,9 @@ public class SkillsController : BaseController
     [HttpPost]
     [ProducesResponseType(typeof(Result<long>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Post([FromBody] InsertSkillCommand command)
+    public async Task<IActionResult> Post([FromBody] InsertSkillCommand command, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(command, cancellationToken);
 
         if (!result.IsSuccess)
             return BadRequest(result);
@@ -62,10 +62,10 @@ public class SkillsController : BaseController
     [HttpDelete("{id:long}")]
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Delete(long id)
+    public async Task<IActionResult> Delete(long id, CancellationToken cancellationToken)
     {
         var command = new DeleteSkillCommand(id);
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(command, cancellationToken);
 
         if (!result.IsSuccess)
             return NotFound(result);

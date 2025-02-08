@@ -26,10 +26,10 @@ public class UsersController : BaseController
     /// <response code="200">Returns the list of users.</response>
     [HttpGet]
     [ProducesResponseType(typeof(Result<List<UserItemViewModel>>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
         var query = new GetAllUsersQuery();
-        var users = await _mediator.Send(query);
+        var users = await _mediator.Send(query, cancellationToken);
 
         return Ok(users);
     }
@@ -44,10 +44,10 @@ public class UsersController : BaseController
     [HttpGet("{id:long}")]
     [ProducesResponseType(typeof(Result<UserViewModel>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Get(long id)
+    public async Task<IActionResult> Get(long id, CancellationToken cancellationToken)
     {
         var query = new GetUserByIdQuery(id);
-        var user = await _mediator.Send(query);
+        var user = await _mediator.Send(query, cancellationToken);
 
         if (!user.IsSuccess)
             return NotFound(user);
@@ -65,9 +65,9 @@ public class UsersController : BaseController
     [HttpPost]
     [ProducesResponseType(typeof(Result<long>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Post([FromBody] InsertUserCommand command)
+    public async Task<IActionResult> Post([FromBody] InsertUserCommand command, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(command, cancellationToken);
 
         if (!result.IsSuccess)
             return BadRequest(result);
@@ -87,10 +87,10 @@ public class UsersController : BaseController
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Put(long id, [FromBody] UpdateUserCommand command)
+    public async Task<IActionResult> Put(long id, [FromBody] UpdateUserCommand command, CancellationToken cancellationToken)
     {
         command.Id = id;
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(command, cancellationToken);
 
         if (!result.IsSuccess)
             return BadRequest(result);
@@ -108,10 +108,10 @@ public class UsersController : BaseController
     [HttpDelete("{id:long}")]
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Delete(long id)
+    public async Task<IActionResult> Delete(long id, CancellationToken cancellationToken)
     {
         var command = new DeleteUserCommand(id);
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(command, cancellationToken);
 
         if (!result.IsSuccess)
             return NotFound(result);
