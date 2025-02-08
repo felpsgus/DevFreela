@@ -1,7 +1,7 @@
 using DevFreela.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DevFreela.Persistence.Mapping;
+namespace DevFreela.Infra.Persistence.Mapping;
 
 public class UserSkillMap : BaseMap<UserSkill>
 {

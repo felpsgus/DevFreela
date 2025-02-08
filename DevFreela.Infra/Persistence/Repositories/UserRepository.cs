@@ -1,9 +1,9 @@
 using DevFreela.Domain.Entities;
 using DevFreela.Domain.Interfaces;
-using DevFreela.Persistence.Context;
+using DevFreela.Infra.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace DevFreela.Persistence.Repositories;
+namespace DevFreela.Infra.Persistence.Repositories;
 
 public class UserRepository : IUserRepository
 {
@@ -57,5 +57,15 @@ public class UserRepository : IUserRepository
     public async Task<bool> CheckEmailAsync(string email, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Users.AnyAsync(u => u.Email == email, cancellationToken);
+    }
+
+    public Task<User?> GetUserByEmail(string email, CancellationToken cancellationToken = default)
+    {
+        return _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email, cancellationToken);
+    }
+
+    public async Task<User?> GetUserByCredentials(string email, string password, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email && u.Password == password, cancellationToken);
     }
 }

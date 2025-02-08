@@ -2,22 +2,22 @@ using DevFreela.Domain.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace DevFreela.Persistence.Interceptors;
+namespace DevFreela.Infra.Persistence.Interceptors;
 
-public class UpdateInterceptor : SaveChangesInterceptor
+public class SoftDeleteInterceptor : SaveChangesInterceptor
 {
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData,
         InterceptionResult<int> result,
-        CancellationToken cancellationToken = new())
+        CancellationToken cancellationToken = new CancellationToken())
     {
         if (eventData.Context is null) return base.SavingChangesAsync(eventData, result, cancellationToken);
 
-        var entries = eventData.Context.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified);
+        var entries = eventData.Context.ChangeTracker.Entries<Entity>().Where(e => e.State == EntityState.Deleted);
 
         foreach (var entry in entries)
         {
-            if (entry.Entity is not Entity entity) continue;
-            entity.Update();
+            entry.State = EntityState.Modified;
+            entry.Entity.Delete();
         }
 
         return base.SavingChangesAsync(eventData, result, cancellationToken);

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace DevFreela.Persistence.Migrations
+namespace DevFreela.Infra.Migrations
 {
     /// <inheritdoc />
     public partial class _4 : Migration

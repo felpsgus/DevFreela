@@ -1,9 +1,9 @@
 using DevFreela.Domain.Entities;
 using DevFreela.Domain.Interfaces;
-using DevFreela.Persistence.Context;
+using DevFreela.Infra.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace DevFreela.Persistence.Repositories;
+namespace DevFreela.Infra.Persistence.Repositories;
 
 public class SkillRepository : ISkillRepository
 {

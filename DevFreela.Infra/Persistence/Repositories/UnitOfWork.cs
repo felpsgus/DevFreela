@@ -1,7 +1,7 @@
 using DevFreela.Domain.Interfaces;
-using DevFreela.Persistence.Context;
+using DevFreela.Infra.Persistence.Context;
 
-namespace DevFreela.Persistence.Repositories;
+namespace DevFreela.Infra.Persistence.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {

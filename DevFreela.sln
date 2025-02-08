@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevFreela.Api", "DevFreela.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevFreela.Domain", "DevFreela.Domain\DevFreela.Domain.csproj", "{433A8F36-A12B-4529-B503-C3B78ABA2C4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevFreela.Persistence", "DevFreela.Persistence\DevFreela.Persistence.csproj", "{9E57D9C2-5728-4757-9267-C5BCD5C0310E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevFreela.Infra", "DevFreela.Infra\DevFreela.Infra.csproj", "{9E57D9C2-5728-4757-9267-C5BCD5C0310E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevFreela.Application", "DevFreela.Application\DevFreela.Application.csproj", "{860D2D2F-FA55-4AC2-B6BD-8581385D8C22}"
 EndProject

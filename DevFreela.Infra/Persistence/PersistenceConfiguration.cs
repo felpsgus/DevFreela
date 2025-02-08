@@ -1,14 +1,14 @@
 using DevFreela.Domain.Interfaces;
-using DevFreela.Persistence.Context;
-using DevFreela.Persistence.Interceptors;
-using DevFreela.Persistence.Repositories;
+using DevFreela.Infra.Persistence.Context;
+using DevFreela.Infra.Persistence.Interceptors;
+using DevFreela.Infra.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DevFreela.Persistence;
+namespace DevFreela.Infra.Persistence;
 
-public static class PersistenceConfiguration
+internal static class PersistenceConfiguration
 {
     public static IServiceCollection ConfigurePersistence(this IServiceCollection services,
         IConfiguration configuration)
