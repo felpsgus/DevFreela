@@ -1,4 +1,3 @@
-using DevFreela.Domain.Entities;
 using DevFreela.Domain.Exceptions;
 using DevFreela.Test.Fakes;
 

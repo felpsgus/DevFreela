@@ -32,7 +32,8 @@ public class InsertUserHandlerTest
             .Returns(fakeUser.Password);
 
         var insertUserHandler = new InsertUserHandler(userRepository.Object, unitOfWork.Object, authService.Object);
-        var insertUserCommand = new InsertUserCommand(fakeUser.FullName, fakeUser.Email, fakeUser.BirthDate, fakeUser.Password, fakeUser.Roles, null);
+        var insertUserCommand = new InsertUserCommand(fakeUser.FullName, fakeUser.Email, fakeUser.BirthDate,
+            fakeUser.Password, fakeUser.Roles, null);
 
         // Act
         var result = await insertUserHandler.Handle(insertUserCommand, CancellationToken.None);

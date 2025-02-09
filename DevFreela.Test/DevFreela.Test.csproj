@@ -21,11 +21,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DevFreela.Api\DevFreela.Api.csproj"/>
+      <Folder Include="Unit\" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Unit\" />
+      <ProjectReference Include="..\DevFreela.Application\DevFreela.Application.csproj" />
     </ItemGroup>
 
 </Project>
