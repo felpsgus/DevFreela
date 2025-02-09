@@ -1,3 +1,4 @@
+using DevFreela.Domain.Enums;
 using DevFreela.Domain.Exceptions;
 using DevFreela.Domain.Shared;
 
@@ -9,17 +10,21 @@ public class User : Entity
     {
     }
 
-    public User(string fullName, string email, DateOnly birthDate)
+    public User(string fullName, string email, DateOnly birthDate, string password, RoleEnum[] roles)
     {
         FullName = fullName;
         Email = email;
         BirthDate = birthDate;
+        Password = password;
+        Roles = roles;
     }
 
     public string FullName { get; private set; }
     public string Email { get; private set; }
     public DateOnly BirthDate { get; private set; }
     public bool Active { get; private set; } = true;
+    public string Password { get; private set; }
+    public RoleEnum[] Roles { get; private set; }
 
     public ICollection<Skill> Skills { get; private set; } = [];
     public ICollection<UserSkill> UserSkills { get; init; } = [];
@@ -27,10 +32,11 @@ public class User : Entity
     public ICollection<Project> FreelanceProjects { get; private set; } = [];
     public ICollection<ProjectComment> Comments { get; private set; } = [];
 
-    public void Update(string requestName, string requestEmail, List<long> userSkills)
+    public void Update(string requestName, string requestEmail, RoleEnum[] roles, List<long> userSkills)
     {
         FullName = requestName;
         Email = requestEmail;
+        Roles = roles;
         UpdateSkills(userSkills);
     }
 

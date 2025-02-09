@@ -18,9 +18,8 @@ public sealed class InsertUserValidator : AbstractValidator<InsertUserCommand>
             .WithMessage("Invalid e-mail.")
             .NotEmpty()
             .WithMessage("E-mail is required.")
-            .MaximumLength(30)
-            .WithMessage("Maximum length is 30 characters.")
-            .MustAsync(async (email, cancellationToken) => await userRepository.CheckEmailAsync(email, cancellationToken) == false)
+            .MustAsync(async (email, cancellationToken) =>
+                await userRepository.CheckEmailAsync(email, cancellationToken) == null)
             .WithMessage("E-mail already in use.");
 
         RuleFor(p => p.BirthDate)

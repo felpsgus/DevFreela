@@ -8,6 +8,8 @@ using DevFreela.Application.Projects.Commands.UpdateProject;
 using DevFreela.Application.Projects.Queries.GetAllProjects;
 using DevFreela.Application.Projects.Queries.GetProjectById;
 using DevFreela.Application.Views;
+using DevFreela.Domain.Enums;
+using DevFreela.Infra.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -64,6 +66,7 @@ public class ProjectsController : BaseController
     /// <response code="201">Returns the created project.</response>
     /// <response code="400">If the project details are invalid.</response>
     [HttpPost]
+    [HasPermission(RoleEnum.Client)]
     [ProducesResponseType(typeof(Result<long>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Result<long>), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Post([FromBody] InsertProjectCommand command, CancellationToken cancellationToken)
@@ -85,10 +88,12 @@ public class ProjectsController : BaseController
     /// <response code="204">If the project is updated successfully.</response>
     /// <response code="400">If the project details are invalid.</response>
     [HttpPut("{id:long}")]
+    [HasPermission(RoleEnum.Client)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Put(long id, [FromBody] UpdateProjectCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> Put(long id, [FromBody] UpdateProjectCommand command,
+        CancellationToken cancellationToken)
     {
         command.Id = id;
         var result = await _mediator.Send(command, cancellationToken);
@@ -107,6 +112,7 @@ public class ProjectsController : BaseController
     /// <response code="204">If the project is deleted successfully.</response>
     /// <response code="404">If the project is not found.</response>
     [HttpDelete("{id:long}")]
+    [HasPermission(RoleEnum.Client)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(long id, CancellationToken cancellationToken)
@@ -130,7 +136,8 @@ public class ProjectsController : BaseController
     [HttpPost("{id:long}/comments")]
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> PostComment(long id, [FromBody] AddCommentCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> PostComment(long id, [FromBody] AddCommentCommand command,
+        CancellationToken cancellationToken)
     {
         command.ProjectId = id;
         var result = await _mediator.Send(command, cancellationToken);
@@ -149,6 +156,7 @@ public class ProjectsController : BaseController
     /// <response code="204">If the project is started successfully.</response>
     /// <response code="404">If the project is not found.</response>
     [HttpPut("{id:long}/start")]
+    [HasPermission(RoleEnum.Client)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Start(long id, CancellationToken cancellationToken)
@@ -169,6 +177,7 @@ public class ProjectsController : BaseController
     /// <response code="204">If the project is completed successfully.</response>
     /// <response code="404">If the project is not found.</response>
     [HttpPut("{id:long}/complete")]
+    [HasPermission(RoleEnum.Client)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Complete(long id, CancellationToken cancellationToken)

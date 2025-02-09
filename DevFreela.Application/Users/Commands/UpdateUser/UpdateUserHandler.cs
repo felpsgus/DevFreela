@@ -18,7 +18,7 @@ public sealed class UpdateUserHandler : IRequestHandler<UpdateUserCommand, Resul
     public async Task<Result> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(request.Id, cancellationToken: cancellationToken);
-        user.Update(request.Name, request.Email, request.Skills?.ToList() ?? []);
+        user.Update(request.Name, request.Email, request.Roles, request.Skills?.ToList() ?? []);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success();
     }

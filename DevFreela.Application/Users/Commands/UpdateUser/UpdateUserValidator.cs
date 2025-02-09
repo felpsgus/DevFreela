@@ -24,9 +24,11 @@ public sealed class UpdateUserValidator : AbstractValidator<UpdateUserCommand>
             .WithMessage("Invalid e-mail.")
             .NotEmpty()
             .WithMessage("E-mail is required.")
-            .MaximumLength(30)
-            .WithMessage("Maximum length is 30 characters.")
-            .MustAsync(async (email, cancellationToken) => await userRepository.CheckEmailAsync(email, cancellationToken) == false)
+            .MustAsync(async (command, email, cancellationToken) =>
+            {
+                var user = await userRepository.CheckEmailAsync(email, cancellationToken);
+                return user == null || user.Id == command.Id;
+            })
             .WithMessage("E-mail already in use.");
 
         When(p => p.Skills != null, () =>

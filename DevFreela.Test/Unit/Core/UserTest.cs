@@ -1,5 +1,6 @@
 using DevFreela.Domain.Entities;
 using DevFreela.Domain.Exceptions;
+using DevFreela.Test.Fakes;
 
 namespace DevFreela.Test.Unit.Core;
 
@@ -9,10 +10,12 @@ public class UserTest
     public void UserIsCreated_Update_Success()
     {
         // Arrange
-        var user = new User("User Test", "test@test", new DateOnly(1990, 1, 1));
+        var user = FakeDataHelper.GetFakeUser();
+        var userUpdate = FakeDataHelper.GetFakeUser();
 
         // Act
-        user.Update("User Test Updated", "test@test", new List<long> { 1, 2, 3 });
+        user.Update(userUpdate.FullName, userUpdate.Email, userUpdate.Roles,
+            userUpdate.UserSkills.Select(us => us.SkillId).ToList());
 
         // Assert
         user.FullName.Should().Be("User Test Updated");
@@ -23,7 +26,7 @@ public class UserTest
     public void UserIsInactivated_Inactivate_Success()
     {
         // Arrange
-        var user = new User("User Test", "test@test", new DateOnly(1990, 1, 1));
+        var user = FakeDataHelper.GetFakeUser();
 
         // Act
         user.Inactivate();
@@ -36,7 +39,7 @@ public class UserTest
     public void UserIsInactivated_Inactivate_ThrowException()
     {
         // Arrange
-        var user = new User("User Test", "test@test", new DateOnly(1990, 1, 1));
+        var user = FakeDataHelper.GetFakeUser();
         user.Inactivate();
 
         // Act
@@ -50,7 +53,7 @@ public class UserTest
     public void UserIsInactivated_Activate_Success()
     {
         // Arrange
-        var user = new User("User Test", "test@test", new DateOnly(1990, 1, 1));
+        var user = FakeDataHelper.GetFakeUser();
         user.Inactivate();
 
         // Act
@@ -64,7 +67,7 @@ public class UserTest
     public void UserIsActivated_Activate_ThrowException()
     {
         // Arrange
-        var user = new User("User Test", "test@test", new DateOnly(1990, 1, 1));
+        var user = FakeDataHelper.GetFakeUser();
 
         // Act
         Action activate = user.Activate;

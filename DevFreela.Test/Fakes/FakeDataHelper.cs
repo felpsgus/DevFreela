@@ -1,5 +1,6 @@
 using Bogus;
 using DevFreela.Domain.Entities;
+using DevFreela.Domain.Enums;
 
 namespace DevFreela.Test.Fakes;
 
@@ -23,7 +24,9 @@ public static class FakeDataHelper
                 f.Name.FirstName(),
                 f.Internet.Email(),
                 f.Date.BetweenDateOnly(DateOnly.FromDateTime(DateTime.Now.AddYears(-50)),
-                    DateOnly.FromDateTime(DateTime.Now.AddYears(-18)))
+                    DateOnly.FromDateTime(DateTime.Now.AddYears(-18))),
+                f.Random.String(8),
+                [RoleEnum.Client, RoleEnum.Freelancer]
             )
         )
         .RuleFor(u => u.Id, f => f.Random.Int(1, 200))

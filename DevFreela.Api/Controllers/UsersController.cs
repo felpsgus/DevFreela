@@ -1,11 +1,13 @@
 using DevFreela.Application.Abstractions;
 using DevFreela.Application.Users.Commands.DeleteUser;
 using DevFreela.Application.Users.Commands.InsertUser;
+using DevFreela.Application.Users.Commands.Login;
 using DevFreela.Application.Users.Commands.UpdateUser;
 using DevFreela.Application.Users.Queries.GetAllUsers;
 using DevFreela.Application.Users.Queries.GetUserById;
 using DevFreela.Application.Views;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFreela.Api.Controllers;
@@ -63,6 +65,7 @@ public class UsersController : BaseController
     /// <response code="201">Returns the created user.</response>
     /// <response code="400">If the user details are invalid.</response>
     [HttpPost]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(Result<long>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Post([FromBody] InsertUserCommand command, CancellationToken cancellationToken)
@@ -72,7 +75,7 @@ public class UsersController : BaseController
         if (!result.IsSuccess)
             return BadRequest(result);
 
-        return CreatedAtAction(nameof(Get), new { id = result.Data }, command);
+        return Ok(result);
     }
 
     /// <summary>
@@ -87,7 +90,8 @@ public class UsersController : BaseController
     [ProducesResponseType(typeof(Result), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Put(long id, [FromBody] UpdateUserCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> Put(long id, [FromBody] UpdateUserCommand command,
+        CancellationToken cancellationToken)
     {
         command.Id = id;
         var result = await _mediator.Send(command, cancellationToken);
@@ -117,5 +121,26 @@ public class UsersController : BaseController
             return NotFound(result);
 
         return NoContent();
+    }
+
+    /// <summary>
+    /// Logs in a user with the provided credentials.
+    /// </summary>
+    /// <param name="command">The user credentials.</param>
+    /// <returns>The login token.</returns>
+    /// <response code="200">Returns the login token.</response>
+    /// <response code="400">If the user credentials are invalid.</response>
+    [HttpPost("login")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(Result<LoginViewModel>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Login([FromBody] LoginCommand command, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(command, cancellationToken);
+
+        if (!result.IsSuccess)
+            return BadRequest(result);
+
+        return Ok(result);
     }
 }

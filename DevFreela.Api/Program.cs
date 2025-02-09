@@ -1,5 +1,6 @@
 using System.Reflection;
 using DevFreela.Api;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,32 @@ builder.Services.AddSwaggerGen(options =>
         Description = "API REST created in course Formação ASP.NET Core",
     });
 
+    options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+    {
+        Name = JwtBearerDefaults.AuthenticationScheme,
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        BearerFormat = "JWT",
+        Description =
+            "Enter 'Bearer' [space] and then your token in the text input below.\n\nExample: \"Bearer 12345abcdef\"",
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = JwtBearerDefaults.AuthenticationScheme,
+                },
+            },
+            Array.Empty<string>()
+        }
+    });
+
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
@@ -54,6 +81,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseExceptionHandler();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

@@ -54,18 +54,15 @@ public class UserRepository : IUserRepository
         return await _dbContext.Users.ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public async Task<bool> CheckEmailAsync(string email, CancellationToken cancellationToken = default)
+    public async Task<User?> CheckEmailAsync(string email, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Users.AnyAsync(u => u.Email == email, cancellationToken);
+        return await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email, cancellationToken);
     }
 
-    public Task<User?> GetUserByEmail(string email, CancellationToken cancellationToken = default)
+    public async Task<User?> GetUserByCredentials(string email, string password,
+        CancellationToken cancellationToken = default)
     {
-        return _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email, cancellationToken);
-    }
-
-    public async Task<User?> GetUserByCredentials(string email, string password, CancellationToken cancellationToken = default)
-    {
-        return await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email && u.Password == password, cancellationToken);
+        return await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email && u.Password == password,
+            cancellationToken);
     }
 }

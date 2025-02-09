@@ -43,14 +43,19 @@ public class Result<T> : Result
 
 public class ValidationResult : Result
 {
-    private ValidationResult(bool isSuccess = true, IEnumerable<Error>? errors = null) : base(isSuccess, errors) { }
+    private ValidationResult(bool isSuccess = true, IEnumerable<Error>? errors = null) : base(isSuccess, errors)
+    {
+    }
 
     public static ValidationResult WithErrors(IEnumerable<Error> errors) => new(false, errors);
 }
 
 public class ValidationResult<T> : Result<T>
 {
-    private ValidationResult(T? data, bool isSuccess = true, IEnumerable<Error>? errors = null) : base(data, isSuccess, errors) { }
+    private ValidationResult(T? data, bool isSuccess = true, IEnumerable<Error>? errors = null) : base(data, isSuccess,
+        errors)
+    {
+    }
 
     public static ValidationResult<T> WithErrors(IEnumerable<Error> errors) => new(default, false, errors);
 }

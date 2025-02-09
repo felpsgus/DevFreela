@@ -1,3 +1,4 @@
+using DevFreela.Application.Abstractions.Interfaces;
 using DevFreela.Application.Users.Commands.InsertUser;
 using DevFreela.Domain.Entities;
 using DevFreela.Domain.Interfaces;
@@ -15,6 +16,7 @@ public class InsertUserHandlerTest
 
         var userRepository = new Mock<IUserRepository>();
         var unitOfWork = new Mock<IUnitOfWork>();
+        var authService = new Mock<IAuthService>();
 
         userRepository
             .Setup(ur => ur.AddAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
@@ -25,8 +27,12 @@ public class InsertUserHandlerTest
             .Setup(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
-        var insertUserHandler = new InsertUserHandler(userRepository.Object, unitOfWork.Object);
-        var insertUserCommand = new InsertUserCommand(fakeUser.FullName, fakeUser.Email, fakeUser.BirthDate, null);
+        authService
+            .Setup(a => a.ComputeHash(It.IsAny<string>()))
+            .Returns(fakeUser.Password);
+
+        var insertUserHandler = new InsertUserHandler(userRepository.Object, unitOfWork.Object, authService.Object);
+        var insertUserCommand = new InsertUserCommand(fakeUser.FullName, fakeUser.Email, fakeUser.BirthDate, fakeUser.Password, fakeUser.Roles, null);
 
         // Act
         var result = await insertUserHandler.Handle(insertUserCommand, CancellationToken.None);
