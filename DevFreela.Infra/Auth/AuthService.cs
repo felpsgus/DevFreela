@@ -33,13 +33,6 @@ public class AuthService : IAuthService
         return hash;
     }
 
-    public bool CompareHash(string password, string hashPassword)
-    {
-        var hash = ComputeHash(password);
-
-        return hash == hashPassword;
-    }
-
     public string GenerateJwtToken(User user)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
